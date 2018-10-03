@@ -31,8 +31,6 @@ public class CubeMesh
 
         yield return CreateVertices();
         yield return CreateTriangles();
-
-
     }
 
     private IEnumerator CreateVertices()
@@ -144,10 +142,26 @@ public class CubeMesh
 
         int vMin = ring * (YSize + 1) - 1;
         int vMid = vMin + 1;
+        int vMax = v + 2;
 
-        t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + XSize - 1);
-        
+        for (int z = 1; z < ZSize - 1; z++, vMin--, vMid++, vMax++)
+        {
+            // Middle rows
+            t = SetQuad(triangles, t, vMin, vMid, vMin - 1, vMid + XSize - 1);
+            for (int x = 1; x < XSize - 1; x++, vMid++)
+            {
+                t = SetQuad(triangles, t, vMid, vMid + 1, vMid + XSize - 1, vMid + XSize);
+            }
+            t = SetQuad(triangles, t, vMid, vMax, vMid + XSize - 1, vMax + 1);
+        }
 
+        int vTop = vMin - 2;
+        t = SetQuad(triangles, t, vMin, vMid, vTop + 1, vTop);
+        for (int x = 1; x < XSize - 1; x++, vTop--, vMid++)
+        {
+            t = SetQuad(triangles, t, vMid, vMid + 1, vTop, vTop - 1);
+        }
+        t = SetQuad(triangles, t, vMid, vTop - 2, vTop, vTop - 1);
         return t;
     }
 
@@ -171,8 +185,9 @@ public class CubeMesh
         Gizmos.color = Color.black;
         for (int i = 0; i < mVertices.Length; i++)
         {
-            Gizmos.DrawSphere(mVertices[i], 0.1f);
-            Handles.Label(mVertices[i], $"index: {i}");
+            var vertexWorldSpace = transform.localToWorldMatrix * mVertices[i];
+            Gizmos.DrawSphere(vertexWorldSpace, 0.1f);
+            Handles.Label(vertexWorldSpace, $"index: {i}");
         }
 
     }
