@@ -132,33 +132,40 @@ public class AnimatedCubeMesh
 
     private void SetVertex(int i, int x, int y, int z)
     {
+        x -= XSize / 2;
+        y -= YSize / 2;
+        z -= ZSize / 2;
         Vector3 inner = new Vector3(x, y, z);
         mVertices[i] = new Vector3(x, y, z);
 
+        var xUpperLimit = XSize / 2;
+        var yUpperLimit = YSize / 2;
+        var zUpperLimit = ZSize / 2;
+
         // Roundness is the distance from a coordinate to the inner cube!
-        if (x < Roundness)
+        if (x < -xUpperLimit + Roundness)
         {
-            inner.x = Roundness;
+            inner.x = -xUpperLimit + Roundness;
         }
-        else if (x > XSize - Roundness)
+        else if (x > xUpperLimit - Roundness)
         {
-            inner.x = XSize - Roundness;
+            inner.x = xUpperLimit - Roundness;
         }
-        if (y < Roundness)
+        if (y < -yUpperLimit + Roundness)
         {
-            inner.y = Roundness;
+            inner.y = -yUpperLimit + Roundness;
         }
-        else if (y > YSize - Roundness)
+        else if (y > yUpperLimit - Roundness)
         {
-            inner.y = YSize - Roundness;
+            inner.y = yUpperLimit - Roundness;
         }
-        if (z < Roundness)
+        if (z < -zUpperLimit + Roundness)
         {
-            inner.z = Roundness;
+            inner.z = -zUpperLimit + Roundness;
         }
-        else if (z > ZSize - Roundness)
+        else if (z > zUpperLimit - Roundness)
         {
-            inner.z = ZSize - Roundness;
+            inner.z = zUpperLimit - Roundness;
         }
 
         mNormals[i] = (mVertices[i] - inner).normalized;
@@ -357,9 +364,10 @@ public class AnimatedCubeMesh
             Gizmos.DrawSphere(vertexWorldSpace, 0.05f);
             Gizmos.color = Color.yellow;
             Gizmos.DrawRay(mVertices[i], mNormals[i]);
+            //Handles.Label(mVertices[i], $"{mVertices[i]}");
         }
 
-        if (mState == State.None)
+        if (mState == State.None || true)
             return;
 
         GUIStyle style = new GUIStyle();
