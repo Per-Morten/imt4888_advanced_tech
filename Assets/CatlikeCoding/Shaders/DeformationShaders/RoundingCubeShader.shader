@@ -48,31 +48,33 @@
             {
                 v2f o;
                 float3 inner = float3(v.vertex.x, v.vertex.y, v.vertex.z);
-                if (inner.x < _Roundness)
+
+                float3 upperLimits = float3(_XSize / 2, _YSize / 2, _ZSize / 2);
+                if (inner.x < -upperLimits.x + _Roundness)
                 {
-                    inner.x = _Roundness;
+                    inner.x = -upperLimits.x + _Roundness;
                 }
-                else if (inner.x > _XSize - _Roundness)
+                else if (inner.x > upperLimits.x - _Roundness)
                 {
-                    inner.x = _XSize - _Roundness;
+                    inner.x = upperLimits.x - _Roundness;
                 }
-                if (inner.y < _Roundness)
+                if (inner.y < -upperLimits.y + _Roundness)
                 {
-                    inner.y = _Roundness;
+                    inner.y = -upperLimits.y + _Roundness;
                 }
-                else if (inner.y > _YSize - _Roundness)
+                else if (inner.y > upperLimits.y - _Roundness)
                 {
-                    inner.y = _YSize - _Roundness;
+                    inner.y = upperLimits.y - _Roundness;
                 }
-                if (inner.z < _Roundness)
+                if (inner.z < -upperLimits.z + _Roundness)
                 {
-                    inner.z = _Roundness;
+                    inner.z = -upperLimits.z + _Roundness;
                 }
-                else if (inner.z > _ZSize - _Roundness)
+                else if (inner.z > upperLimits.z - _Roundness)
                 {
-                    inner.z = _ZSize - _Roundness;
+                    inner.z = upperLimits.z - _Roundness;
                 }
-                
+
                 float3 normal = 0;
                 if (_Roundness != 0)
                 {

@@ -81,22 +81,22 @@ public class Procedural : MonoBehaviour
             {
                 for (int x = 0; x <= XSize; x++)
                 {
-                    vertices[v++] = new Vector3(x, y, 0);
+                    vertices[v++] = new Vector3(x - XSize / 2, y - YSize / 2, 0 - ZSize / 2);
                 }
 
                 for (int z = 1; z <= ZSize; z++)
                 {
-                    vertices[v++] = new Vector3(XSize, y, z);
+                    vertices[v++] = new Vector3(XSize / 2, y - YSize / 2, z - ZSize / 2);
                 }
 
                 for (int x = XSize - 1; x >= 0; x--)
                 {
-                    vertices[v++] = new Vector3(x, y, ZSize);
+                    vertices[v++] = new Vector3(x - XSize / 2, y - YSize / 2, ZSize / 2);
                 }
 
                 for (int z = ZSize - 1; z > 0; z--)
                 {
-                    vertices[v++] = new Vector3(0, y, z);
+                    vertices[v++] = new Vector3(0 - XSize / 2, y - YSize / 2, z - ZSize / 2);
                 }
             }
 
@@ -105,7 +105,7 @@ public class Procedural : MonoBehaviour
             {
                 for (int x = 1; x < XSize; x++)
                 {
-                    vertices[v++] = new Vector3(x, YSize, z);
+                    vertices[v++] = new Vector3(x - XSize / 2, YSize / 2, z - ZSize / 2);
                 }
             }
 
@@ -113,7 +113,7 @@ public class Procedural : MonoBehaviour
             {
                 for (int x = 1; x < XSize; x++)
                 {
-                    vertices[v++] = new Vector3(x, 0, z);
+                    vertices[v++] = new Vector3(x - XSize / 2, 0 - YSize / 2, z - ZSize / 2);
                 }
             }
         }
