@@ -62,6 +62,7 @@ public class Procedural : MonoBehaviour
     }
 
     // Create standard mesh without roundedness & without normals
+    // Create this so that the pivot is still in the middle of the object, so we don't mess up when rotating the object.
     public static Mesh GenerateCubeMesh(int XSize, int YSize, int ZSize)
     {
         int cornerVertices = 8;
@@ -235,6 +236,5 @@ public class Procedural : MonoBehaviour
         };
 
         return mesh;
-        //return null;
     }
 }
