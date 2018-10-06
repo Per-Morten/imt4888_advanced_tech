@@ -13,7 +13,8 @@ public class WaveDeformation : MonoBehaviour
     void Start()
     {
         var filter = GetComponent<MeshFilter>();
-        filter.mesh = Procedural.GeneratePlaneMesh(45, 45);
+        //filter.mesh = Procedural.GeneratePlaneMesh(45, 45);
+        filter.mesh = Procedural.GenerateCubeMesh(4, 4, 4);
         mMesh = filter.mesh;
         mOriginalVertices = mMesh.vertices;
         

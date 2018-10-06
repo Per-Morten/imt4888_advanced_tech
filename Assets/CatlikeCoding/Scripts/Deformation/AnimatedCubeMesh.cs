@@ -11,15 +11,19 @@ public class AnimatedCubeMesh
     public int YSize;
     public int ZSize;
 
+    [Range(0, 10)]
+    public int Roundness = 2;
+
     public float WaitTime = 0.05f;
     private WaitForSeconds mWait;
 
     private Mesh mMesh;
     private Vector3[] mVertices;
+    private Vector3[] mNormals;
 
-    /// 
+    ///
     /// For animation
-    /// 
+    ///
     private enum State
     {
         None,
@@ -46,6 +50,12 @@ public class AnimatedCubeMesh
         StartCoroutine(Generate());
     }
 
+    [ContextMenu("Generate")]
+    public void StartGeneration()
+    {
+        StartCoroutine(Generate());
+    }
+
     private IEnumerator Generate()
     {
         mMesh = new Mesh();
@@ -65,6 +75,7 @@ public class AnimatedCubeMesh
             (YSize - 1) * (ZSize - 1)) * 2;
 
         mVertices = new Vector3[cornerVertices + edgeVertices + faceVertices];
+        mNormals = new Vector3[mVertices.Length];
 
         // Create Perimeter of the cube
         int v = 0; // Vertex
@@ -72,26 +83,26 @@ public class AnimatedCubeMesh
         {
             for (int x = 0; x <= XSize; x++)
             {
-                mVertices[v++] = new Vector3(x, y, 0);
-                //yield return mWait;
+                SetVertex(v++, x, y, 0);
+                yield return mWait;
             }
 
             for (int z = 1; z <= ZSize; z++)
             {
-                mVertices[v++] = new Vector3(XSize, y, z);
-                //yield return mWait;
+                SetVertex(v++, XSize, y, z);
+                yield return mWait;
             }
 
             for (int x = XSize - 1; x >= 0; x--)
             {
-                mVertices[v++] = new Vector3(x, y, ZSize);
-                //yield return mWait;
+                SetVertex(v++, x, y, ZSize);
+                yield return mWait;
             }
 
             for (int z = ZSize - 1; z > 0; z--)
             {
-                mVertices[v++] = new Vector3(0, y, z);
-                //yield return mWait;
+                SetVertex(v++, 0, y, z);
+                yield return mWait;
             }
         }
 
@@ -100,8 +111,8 @@ public class AnimatedCubeMesh
         {
             for (int x = 1; x < XSize; x++)
             {
-                mVertices[v++] = new Vector3(x, YSize, z);
-                //yield return mWait;
+                SetVertex(v++, x, YSize, z);
+                yield return mWait;
             }
         }
 
@@ -109,14 +120,51 @@ public class AnimatedCubeMesh
         {
             for (int x = 1; x < XSize; x++)
             {
-                mVertices[v++] = new Vector3(x, 0, z);
-                //yield return mWait;
+                SetVertex(v++, x, 0, z);
+                yield return mWait;
             }
         }
 
         mMesh.vertices = mVertices;
-        return null;
-        //yield return mWait;
+        //return null;
+        yield return mWait;
+    }
+
+    private void SetVertex(int i, int x, int y, int z)
+    {
+        Vector3 inner = new Vector3(x, y, z);
+        mVertices[i] = new Vector3(x, y, z);
+
+        // Roundness is the distance from a coordinate to the inner cube!
+        if (x < Roundness)
+        {
+            inner.x = Roundness;
+        }
+        else if (x > XSize - Roundness)
+        {
+            inner.x = XSize - Roundness;
+        }
+        if (y < Roundness)
+        {
+            inner.y = Roundness;
+        }
+        else if (y > YSize - Roundness)
+        {
+            inner.y = YSize - Roundness;
+        }
+        if (z < Roundness)
+        {
+            inner.z = Roundness;
+        }
+        else if (z > ZSize - Roundness)
+        {
+            inner.z = ZSize - Roundness;
+        }
+
+        mNormals[i] = (mVertices[i] - inner).normalized;
+        mVertices[i] = inner + mNormals[i] * Roundness;
+
+        mMesh.vertices = mVertices;
     }
 
     private IEnumerator CreateTriangles()
@@ -132,7 +180,7 @@ public class AnimatedCubeMesh
         for (int y = 0; y < YSize; y++, v++)
         {
             // q = quad
-            // Need to reuse the second and fourth vertex in each ring to wrap around properly, 
+            // Need to reuse the second and fourth vertex in each ring to wrap around properly,
             // otherwise the quad will go diagonally up.
             for (int q = 0; q < ring - 1; q++, v++)
             {
@@ -156,7 +204,7 @@ public class AnimatedCubeMesh
     private IEnumerator CreateTopFace(int[] triangles, int t, int ring)
     {
         mState = State.TopFirstRow;
-        Debug.Log($"Ring size: {ring}");
+
         // Create first row
         int v = ring * YSize;
         for (int x = 0; x < XSize - 1; x++, v++)
@@ -165,7 +213,7 @@ public class AnimatedCubeMesh
             idx1 = v;
             yield return UpdateTriangles(triangles);
         }
-        // v + 2 
+        // v + 2
         t = SetQuad(triangles, t, v, v + 1, v + ring - 1, v + 2);
         idx1 = v;
         yield return UpdateTriangles(triangles);
@@ -275,6 +323,8 @@ public class AnimatedCubeMesh
         yield return UpdateTriangles(triangles);
 
         mTriangleIdx = t;
+
+        mState = State.None;
     }
 
     private static int SetQuad(int[] triangles, int i, int v00, int v10, int v01, int v11)
@@ -303,8 +353,10 @@ public class AnimatedCubeMesh
         for (int i = 0; i < mVertices.Length; i++)
         {
             var vertexWorldSpace = transform.localToWorldMatrix * mVertices[i];
+            Gizmos.color = Color.black;
             Gizmos.DrawSphere(vertexWorldSpace, 0.05f);
-            //Handles.Label(vertexWorldSpace, $"index: {i}");
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(mVertices[i], mNormals[i]);
         }
 
         if (mState == State.None)
