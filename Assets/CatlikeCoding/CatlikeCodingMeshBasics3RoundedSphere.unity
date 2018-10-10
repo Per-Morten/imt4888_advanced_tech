@@ -201,14 +201,13 @@ GameObject:
   - component: {fileID: 870448945}
   - component: {fileID: 870448944}
   - component: {fileID: 870448943}
-  - component: {fileID: 870448947}
   m_Layer: 0
-  m_Name: RoundedCubeSphereAnimation
+  m_Name: RoundedCubeMeshAnimation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &870448943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -217,12 +216,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 870448942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8970257063ccef941baf70be26f60822, type: 3}
+  m_Script: {fileID: 11500000, guid: a19bb1f0ae3faa04980cd6ba780d1310, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridSize: 10
-  Radius: 1
-  WaitTime: 0
+  XSize: 2
+  YSize: 2
+  ZSize: 2
+  Roundness: 2
+  WaitTime: 0.0125
 --- !u!23 &870448944
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -276,20 +277,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &870448947
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 870448942}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b26509da4b1ec71479662f34cd3c22f1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Resolution: 10
 --- !u!43 &1073617222
 Mesh:
   m_ObjectHideFlags: 0
@@ -445,43 +434,45 @@ Mesh:
   m_MeshMetrics[0]: 1
   m_MeshMetrics[1]: 1
   m_MeshOptimized: 0
---- !u!1 &1152436867
+--- !u!1 &1672534569
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1152436871}
-  - component: {fileID: 1152436870}
-  - component: {fileID: 1152436869}
-  - component: {fileID: 1152436868}
+  - component: {fileID: 1672534573}
+  - component: {fileID: 1672534572}
+  - component: {fileID: 1672534571}
+  - component: {fileID: 1672534570}
   m_Layer: 0
-  m_Name: CubeSphere
+  m_Name: VertexShaderRoundedCubeMesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1152436868
+--- !u!114 &1672534570
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1152436867}
+  m_GameObject: {fileID: 1672534569}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55480eaaa80a1a047bcdeb872a79d9f1, type: 3}
+  m_Script: {fileID: 11500000, guid: e0d5936ef8b7daf4ea47935c6a477f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridSize: 10
-  Radius: 1
---- !u!23 &1152436869
+  XSize: 8
+  YSize: 8
+  ZSize: 8
+  Roundness: 0
+--- !u!23 &1672534571
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1152436867}
+  m_GameObject: {fileID: 1672534569}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -491,7 +482,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: e96f7942631b04b49a59e5fee72b4374, type: 2}
+  - {fileID: 2100000, guid: 59cf93ffb2193db4f98d9ecacfbb1db8, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -511,25 +502,25 @@ MeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
---- !u!33 &1152436870
+--- !u!33 &1672534572
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1152436867}
+  m_GameObject: {fileID: 1672534569}
   m_Mesh: {fileID: 0}
---- !u!4 &1152436871
+--- !u!4 &1672534573
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1152436867}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.12022868, y: 0.7665469, z: 0.8267796}
+  m_GameObject: {fileID: 1672534569}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1986472840
 GameObject:

@@ -647,7 +647,7 @@ PlayerSettings:
   cloudServicesEnabled:
     UNet: 1
   facebookSdkVersion: 7.9.4
-  apiCompatibilityLevel: 2
+  apiCompatibilityLevel: 3
   cloudProjectId: c5362637-33cc-4298-b4db-18521e42e035
   projectName: procedural_mesh_generation
   organizationId: per-morten-straume
