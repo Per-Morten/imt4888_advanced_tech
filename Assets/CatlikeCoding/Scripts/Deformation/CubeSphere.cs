@@ -9,7 +9,7 @@ public class CubeSphere : MonoBehaviour
     public int Radius = 1;
 
 
-    void Start()
+    void Awake()
     {
         SetupSphere();
         gameObject.AddComponent<SphereCollider>();
