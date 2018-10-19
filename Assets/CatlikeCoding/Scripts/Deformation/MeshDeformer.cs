@@ -2,7 +2,7 @@
 using System.Collections;
 
 [RequireComponent(typeof(MeshFilter))]
-public class MeshDeformer: MonoBehaviour
+public class MeshDeformer: MonoBehaviour, IDeformer
 {
     private Mesh mDeformingMesh;
     private Vector3[] mOriginalVertices;
