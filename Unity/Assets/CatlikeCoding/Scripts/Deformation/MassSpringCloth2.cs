@@ -13,7 +13,6 @@ public class MassSpringCloth2 : MonoBehaviour
     [Header("Cloth settings")]
     public float VertexMass = 20;
     public Vector3 Gravity = new Vector3(0, -9.8f, 0);
-    //public float RestDistance = 1;
     public float Damping = 0.025f;
     public int ConstraintIterations = 2;
 
@@ -25,25 +24,19 @@ public class MassSpringCloth2 : MonoBehaviour
         public int V2Idx;
         public float RestDistance; // The Original Distance
 
-        public Spring(int v1Idx, int v2Idx, Vertex[] vertices)
+        public Spring(int v1Idx, int v2Idx, Vector3[] vertices)
         {
             V1Idx = v1Idx;
             V2Idx = v2Idx;
-            RestDistance = (vertices[v2Idx].Position - vertices[v1Idx].Position).magnitude;
+            RestDistance = (vertices[v2Idx] - vertices[v1Idx]).magnitude;
         }
     };
 
-    private struct Vertex
-    {
-        public int Idx;
-        public Vector3 Position;
-        public Vector3 PrevPosition;
-        public Vector3 Acceleration;
-    }
+    private Vector3[] mPositions;
+    private Vector3[] mPrevPositions;
+    private Vector3[] mAccelerations;
 
-    private Vertex[] mInitialVertices;
-
-    private Vertex[] mVertices;
+    private Vector3[] mOriginalPositions;
 
     private List<Spring> mSprings = new List<Spring>();
 
@@ -60,46 +53,42 @@ public class MassSpringCloth2 : MonoBehaviour
 
     public void Start()
     {
-        //var filter = GetComponent<MeshFilter>();
-        //filter.mesh = Procedural.GeneratePlaneMesh(Rows, Columns);
-        //mMesh = filter.mesh;
-        
+        var filter = GetComponent<MeshFilter>();
+        filter.mesh = Procedural.GeneratePlaneMesh(Rows, Columns);
+        mMesh = filter.mesh;
 
-        mVertices = new Vertex[Rows * Columns];
-        mInitialVertices = new Vertex[mVertices.Length];
         
+        // TODO: Create a mesh for this, so we can see proper cloth =D
+        mPositions = new Vector3[Rows * Columns];
+        mPrevPositions = new Vector3[mPositions.Length];
+        mAccelerations = new Vector3[mPositions.Length];
+        mOriginalPositions = new Vector3[mPositions.Length];
 
+       
         for (int row = 0; row < Rows; row++)
         {
             for (int col = 0; col < Columns; col++)
             {
-                mVertices[row * Columns + col].Position = new Vector3(col / (float)Columns , 0.0f, 1 - (row - 1) / (float)Rows);
-                mVertices[row * Columns + col].Idx = RCToIdx(row, col);
-                mVertices[row * Columns + col].PrevPosition = mVertices[row * Columns + col].Position;
-                mVertices[row * Columns + col].Acceleration = Vector3.zero;
-
-
-
-
-                mInitialVertices[row * Columns + col] = mVertices[row * Columns + col];
-
-
-
+                mPositions[row * Columns + col] = new Vector3(col / (float)Columns , 0.0f, 1 - (row - 1) / (float)Rows);
+                mPrevPositions[row * Columns + col] = mPositions[row * Columns + col];
+                mAccelerations[row * Columns + col] = Vector3.zero;
+                mOriginalPositions[row * Columns + col] = mPositions[row * Columns + col];
+                
                 // Top
                 if (row > 0)
-                    mSprings.Add(new Spring(RCToIdx(row - 1, col), RCToIdx(row, col), mVertices));
+                    mSprings.Add(new Spring(RCToIdx(row - 1, col), RCToIdx(row, col), mPositions));
 
                 // Left
                 if (col > 0)
-                    mSprings.Add(new Spring(RCToIdx(row, col - 1), RCToIdx(row, col), mVertices));
+                    mSprings.Add(new Spring(RCToIdx(row, col - 1), RCToIdx(row, col), mPositions));
 
                 // Top Left
                 if (row > 0 && col > 0)
-                    mSprings.Add(new Spring(RCToIdx(row - 1, col - 1), RCToIdx(row, col), mVertices));
+                    mSprings.Add(new Spring(RCToIdx(row - 1, col - 1), RCToIdx(row, col), mPositions));
 
-                //// Top Right
+                // Top Right
                 if (row > 0 && col < Columns - 1)
-                    mSprings.Add(new Spring(RCToIdx(row - 1, col + 1), RCToIdx(row, col), mVertices));
+                    mSprings.Add(new Spring(RCToIdx(row - 1, col + 1), RCToIdx(row, col), mPositions));
             }
         }
     }
@@ -107,9 +96,9 @@ public class MassSpringCloth2 : MonoBehaviour
     public void FixedUpdate()
     {
         // Add Force
-        for (int i = 0; i < mVertices.Length; i++)
+        for (int i = 0; i < mAccelerations.Length; i++)
         {
-            mVertices[i].Acceleration += (Gravity / VertexMass);
+            mAccelerations[i] += (Gravity / VertexMass);
         }
 
 
@@ -119,45 +108,42 @@ public class MassSpringCloth2 : MonoBehaviour
             for (int i = 0; i < mSprings.Count; i++)
             {
                 var spring = mSprings[i];
-                var diff = mVertices[spring.V2Idx].Position - mVertices[spring.V1Idx].Position;
+                var diff = mPositions[spring.V2Idx] - mPositions[spring.V1Idx];
                 var dist = diff.magnitude;
                 var correction = (diff * (1 - spring.RestDistance / dist)) * 0.25f;
 
-                mVertices[spring.V1Idx].Position += correction;
-                mVertices[spring.V2Idx].Position -= correction;
+                mPositions[spring.V1Idx] += correction;
+                mPositions[spring.V2Idx] -= correction;
             }
 
         }
 
         // Move particles
-        for (int i = 0; i < mVertices.Length; i++)
+        for (int i = 0; i < mPositions.Length; i++)
         {
-            var curr = mVertices[i].Position;
-            var prev = mVertices[i].PrevPosition;
+            var curr = mPositions[i];
+            var prev = mPrevPositions[i];
 
             //curr = curr + (curr - prev) * (1.0f - Damping) + mVertices[i].Acceleration * Time.fixedDeltaTime * 0.1f;
-            curr = curr + (curr - prev) * (1.0f - Damping) + mVertices[i].Acceleration * Time.fixedDeltaTime * Time.fixedDeltaTime;
+            curr = curr + (curr - prev) * (1.0f - Damping) + mAccelerations[i] * Time.fixedDeltaTime * Time.fixedDeltaTime;
 
-            mVertices[i].PrevPosition = mVertices[i].Position;
-            mVertices[i].Position = curr;
+            mPrevPositions[i] = mPositions[i];
+            mPositions[i] = curr;
 
-            mVertices[i].Acceleration = Vector3.zero;
+            mAccelerations[i] = Vector3.zero;
 
         }
+
+        //mMesh.vertices = mPositions;
         
 
 
         var steps = Columns / 5;
         for (int i = 0; i < steps; i++)
         {
-            mVertices[i] = mInitialVertices[i];
-            mVertices[i + steps * 2] = mInitialVertices[i + steps * 2];
-            mVertices[i + steps * 4] = mInitialVertices[i + steps * 4];
-
-
-            //mVertices[i + (Columns / 4 * 3)] = mInitialVertices[i + (Columns / 4 * 3)];
-
-
+            mPositions[i] = mOriginalPositions[i];
+            mPositions[i + steps * 2] = mOriginalPositions[i + steps * 2];
+            mPositions[i + steps * 4] = mOriginalPositions[i + steps * 4];
         }
 
         // Lock top corners.
@@ -183,7 +169,7 @@ public class MassSpringCloth2 : MonoBehaviour
 
     public void OnDrawGizmos()
     {
-        if (mVertices == null)
+        if (mPositions == null)
             return;
 
         // Draw Vertices
@@ -201,8 +187,8 @@ public class MassSpringCloth2 : MonoBehaviour
         for (int i = 0; i < mSprings.Count; i++)
         {
             var spring = mSprings[i];
-            var v1World = transform.TransformPoint(mVertices[spring.V1Idx].Position);
-            var v2World = transform.TransformPoint(mVertices[spring.V2Idx].Position);
+            var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
+            var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
             Gizmos.DrawLine(v1World, v2World);
         }
 
@@ -211,7 +197,7 @@ public class MassSpringCloth2 : MonoBehaviour
         {
             for (int col = 0; col < Columns; col++)
             {
-                var v = transform.TransformPoint(mVertices[row * Columns + col].Position);
+                var v = transform.TransformPoint(mPositions[row * Columns + col]);
                 // Structural Bindings
                 // Top
                 //if (row > 0)
