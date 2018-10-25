@@ -1,5 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEditor;
+
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
 public class AnimatedPlaneMesh
@@ -62,6 +64,9 @@ public class AnimatedPlaneMesh
                 triangles[ti + 4] = vi + XSize + 1;
                 triangles[ti + 5] = vi + XSize + 2;
             }
+            mMesh.triangles = triangles;
+            yield return wait;
+
         }
 
         mMesh.triangles = triangles;
@@ -79,7 +84,10 @@ public class AnimatedPlaneMesh
 
         Gizmos.color = Color.black;
         for (int i = 0; i < mVertices.Length; i++)
+        {
             Gizmos.DrawSphere(transform.TransformPoint(mVertices[i]), 0.1f);
+            Handles.Label(transform.TransformPoint(mVertices[i]), $"{i}");
+        }
     }
 
 }

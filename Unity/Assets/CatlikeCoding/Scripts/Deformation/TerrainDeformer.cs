@@ -39,9 +39,14 @@ public class TerrainDeformer : MonoBehaviour, IDeformer
     {
         mPoint = point;
 
-        Debug.DrawLine(Camera.main.transform.position, point);
+        DebugLines.DrawLine(Camera.main.transform.position, point, Color.green);
+
         for (int i = 0; i < mDisplacedVertices.Length; i++)
+        {
+            //DebugLines.DrawLine(point, transform.TransformPoint(mDisplacedVertices[i]), Color.blue);
             AddForceToVertex(i, point, force);
+
+        }
     }
 
     private void AddForceToVertex(int i, Vector3 point, float force)
@@ -64,17 +69,17 @@ public class TerrainDeformer : MonoBehaviour, IDeformer
 
         for (int i = 0; i <= Rows; i++)
         {
-            // Bottom Row
-            mDisplacedVertices[i] = mOriginalVertices[i];
+            //// Bottom Row
+            //mDisplacedVertices[i] = mOriginalVertices[i];
 
-            // Top Row
-            mDisplacedVertices[(Rows + 1) * Columns + i] = mOriginalVertices[(Rows + 1) * Columns + i];
+            //// Top Row
+            //mDisplacedVertices[(Rows + 1) * Columns + i] = mOriginalVertices[(Rows + 1) * Columns + i];
 
-            // Left Column
-            mDisplacedVertices[Columns * i + i] = mOriginalVertices[Columns * i + i];
+            //// Left Column
+            //mDisplacedVertices[Columns * i + i] = mOriginalVertices[Columns * i + i];
 
-            // Right Column
-            mDisplacedVertices[Columns * (i + 1) + i] = mOriginalVertices[Columns * (i + 1) + i];
+            //// Right Column
+            //mDisplacedVertices[Columns * (i + 1) + i] = mOriginalVertices[Columns * (i + 1) + i];
         }
 
         mDeformingMesh.vertices = mDisplacedVertices;
@@ -90,20 +95,5 @@ public class TerrainDeformer : MonoBehaviour, IDeformer
         velocity *= 1f - Damping * Time.deltaTime;
         mVertexVelocities[i] = velocity;
         mDisplacedVertices[i] += velocity * (Time.deltaTime / UniformScale);
-    }
-
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.black;
-        Gizmos.DrawSphere(mPoint, 0.05f);
-
-        for (int i = 0; i < mDisplacedVertices.Length; i++)
-        {
-            Ray ray = new Ray(mPoint, mDisplacedVertices[i] - mPoint);
-            //Gizmos.DrawRay(ray);
-            Handles.Label(mOriginalVertices[i], $"{i}");
-        }
-        //Gizmos.color = Color.yellow;
-        //Gizmos.DrawRay(mVertices[i], mNormals[i])
     }
 }

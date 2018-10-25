@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
+[RequireComponent(typeof(MeshFilter), typeof(MeshRenderer), typeof(SphereCollider))]
 public class CubeSphere : MonoBehaviour
 {
     Mesh mMesh;
@@ -12,7 +12,9 @@ public class CubeSphere : MonoBehaviour
     void Awake()
     {
         SetupSphere();
-        gameObject.AddComponent<SphereCollider>();
+        GetComponent<SphereCollider>().radius = Radius;
+        GetComponent<SphereCollider>().isTrigger = false;
+
     }
 
     [ContextMenu("Generate")]

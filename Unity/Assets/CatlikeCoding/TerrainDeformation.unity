@@ -205,7 +205,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Force: 10
   ForceOffset: 0.1
-  Radius: 0.5
 --- !u!114 &136729394
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -251,12 +250,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 559765847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 42eb5097da3f1984f9e30b02f2dd13bf, type: 3}
+  m_Script: {fileID: 11500000, guid: 1c1e7b22d4df7d042a6b0fb71475a624, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   SpringForce: 20
   Damping: 5
   UniformScale: 1
+  Rows: 10
+  Columns: 10
 --- !u!23 &559765849
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -320,44 +321,44 @@ MonoBehaviour:
   m_GameObject: {fileID: 559765847}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 55480eaaa80a1a047bcdeb872a79d9f1, type: 3}
+  m_Script: {fileID: 11500000, guid: 45cd557a9e3a9e7469754b2dab4df577, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GridSize: 50
-  Radius: 5
---- !u!1 &1066769041
+  Rows: 10
+  Columns: 10
+--- !u!1 &662753815
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1066769043}
-  - component: {fileID: 1066769042}
+  - component: {fileID: 662753817}
+  - component: {fileID: 662753816}
   m_Layer: 0
-  m_Name: Scripts
+  m_Name: DebugLines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1066769042
+--- !u!114 &662753816
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1066769041}
+  m_GameObject: {fileID: 662753815}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: b24693e313fe3f84c80d21f1e4794dd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!4 &1066769043
+--- !u!4 &662753817
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1066769041}
+  m_GameObject: {fileID: 662753815}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.9083954, y: -0.07791996, z: 5.5274224}
   m_LocalScale: {x: 1, y: 1, z: 1}

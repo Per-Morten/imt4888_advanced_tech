@@ -26,15 +26,21 @@ public class MeshDeformer: MonoBehaviour, IDeformer
 
     public void AddDeformingForce(Vector3 point, float force)
     {
-        Debug.DrawLine(Camera.main.transform.position, point);
+        DebugLines.DrawLine(transform.position, point, Color.green);
         for (int i = 0; i < mDisplacedVertices.Length; i++)
+        {
+            //DebugLines.DrawLine(point, transform.TransformPoint(mDisplacedVertices[i]), Color.blue);
             AddForceToVertex(i, point, force);
+        }
     }
 
     private void AddForceToVertex(int i, Vector3 point, float force)
     {
         point = transform.InverseTransformPoint(point);
         var pointToVertex = mDisplacedVertices[i] - point;
+        //if (pointToVertex.magnitude >= 0.5f)
+        //    return;
+
         pointToVertex *= UniformScale;
         var attenuatedForce = force / (1f + pointToVertex.sqrMagnitude);
         var velocity = attenuatedForce * Time.deltaTime;

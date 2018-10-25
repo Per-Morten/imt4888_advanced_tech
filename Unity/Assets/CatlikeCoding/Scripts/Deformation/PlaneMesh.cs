@@ -11,7 +11,7 @@ public class PlaneMesh : MonoBehaviour
     void Awake()
     {
         SetupPlane();
-        gameObject.AddComponent<BoxCollider>();
+        
     }
 
     [ContextMenu("Generate")]

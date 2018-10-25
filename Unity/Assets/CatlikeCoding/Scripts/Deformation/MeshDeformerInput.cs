@@ -74,7 +74,7 @@ public class MeshDeformerInput : MonoBehaviour
                 point += hit.normal * ForceOffset;
 
                 // Force should be based on total number of hits, rather than the number of dirs.
-                deformer.AddDeformingForce(point, Force / hits.Count);
+                deformer.AddDeformingForce(point, Force);
             }
         }
 
