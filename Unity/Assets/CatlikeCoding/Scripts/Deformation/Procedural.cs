@@ -61,6 +61,64 @@ public class Procedural : MonoBehaviour
         return mesh;
     }
 
+    // Change signature so it takes: Rows, Columns, XSize, YSize
+    // Generates a PlaneMesh consisting of individual Quads.
+    // Heads up: Vertex coordinates are not "triangle triangle triangle"
+    //           But rather follows the entire row all the way to the end.
+    //           See: https://catlikecoding.com/unity/tutorials/procedural-grid/02-grid-indices.png
+    public static Mesh GenerateNonInclusivePlaneMesh(int rows, int columns)
+    {
+        // Code from: https://catlikecoding.com/unity/tutorials/procedural-grid/
+        // TODO: Want to setup vertices so that triangles are drawn in the same manner as other unity items.
+
+
+        // Setup Vertices, uvs and tangents
+        // +1 to get extra vertices for corner of each quad.
+        var vertices = new Vector3[rows * columns];
+        var uvs = new Vector2[vertices.Length];
+        var tangents = new Vector4[vertices.Length];
+
+        for (int i = 0, y = 0; y < rows; y++)
+        {
+            for (int x = 0; x < columns; x++, i++)
+            {
+                vertices[i] = new Vector3(x, y);
+                uvs[i] = new Vector2(x / (float)rows, y / (float)columns);
+                tangents[i] = new Vector4(1f, 0f, 0f, -1f);
+            }
+        }
+
+        // Setup Triangles
+        int[] triangles = new int[(rows - 1) * (columns - 1) * 6];
+
+        // ti = triangleIndex, vi = vertexIdx
+        // Extra incrementing on the vertex index since there is one more vertex than tiles per row.
+        for (int ti = 0, vi = 0, y = 0; y < columns - 1; y++, vi++)
+        {
+            for (int x = 0; x < rows - 1; x++, ti += 6, vi++)
+            {
+                triangles[ti] = vi;
+                triangles[ti + 1] = vi + rows;
+                triangles[ti + 2] = vi + 1;
+                triangles[ti + 3] = vi + 1;
+                triangles[ti + 4] = vi + rows;
+                triangles[ti + 5] = vi + rows + 1;
+            }
+        }
+
+        var mesh = new Mesh
+        {
+            name = "Procedural Grid",
+            vertices = vertices,
+            uv = uvs,
+            tangents = tangents,
+            triangles = triangles
+        };
+        mesh.RecalculateNormals();
+
+        return mesh;
+    }
+
     // Create standard mesh without roundedness & without normals
     // Create this so that the pivot is still in the middle of the object, so we don't mess up when rotating the object.
     public static Mesh GenerateCubeMesh(int XSize, int YSize, int ZSize)
