@@ -647,9 +647,9 @@ Use $\backslash$setthesisyear\{<year>\} to set year.
 
 
 	\renewcommand\nmt@firstpagetext{%
-	   Master's Thesis\\
+	   IMT4888 - Advanced Game Technology\\
 		 \nmt@DegreeNameText\\
-	   30 ECTS\\
+	   7.5 ECTS\\
 	   \nmt@DepartmentNameText\\
 	 }
 
@@ -731,7 +731,7 @@ Use $\backslash$setthesisyear\{<year>\} to set year.
     \end{center}	
 		\vspace*{\fill}
 		
-		Supervisor: \thesis@supervisor 
+		%Supervisor: \thesis@supervisor 
 		
 		\if@supervisorA Co-Supervisor: \@supervisorA \fi
 
