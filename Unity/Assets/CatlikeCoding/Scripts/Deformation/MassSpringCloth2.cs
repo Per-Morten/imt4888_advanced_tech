@@ -1,10 +1,9 @@
 ﻿using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using System;
 
 [RequireComponent(typeof(MeshFilter), typeof(MeshRenderer))]
-public class MassSpringCloth2 : MonoBehaviour
+public class MassSpringCloth2
+    : MonoBehaviour
 {
     [Header("Grid settings")]
     public int Rows = 60;
@@ -15,8 +14,10 @@ public class MassSpringCloth2 : MonoBehaviour
     public Vector3 Gravity = new Vector3(0, -9.8f, 0);
     public float Damping = 0.025f;
     public int ConstraintIterations = 2;
+    private Mesh mMesh;
 
-    Mesh mMesh;
+    [Header("Collisions - The colider of the sphere to collide with")]
+    public SphereCollider mSphereCollider;
 
     private struct Spring
     {
@@ -54,26 +55,27 @@ public class MassSpringCloth2 : MonoBehaviour
     public void Start()
     {
         var filter = GetComponent<MeshFilter>();
-        filter.mesh = Procedural.GeneratePlaneMesh(Rows, Columns);
+        filter.mesh = Procedural.GenerateNonInclusivePlaneMesh(Rows, Columns);
         mMesh = filter.mesh;
 
-        
+
         // TODO: Create a mesh for this, so we can see proper cloth =D
         mPositions = new Vector3[Rows * Columns];
         mPrevPositions = new Vector3[mPositions.Length];
         mAccelerations = new Vector3[mPositions.Length];
         mOriginalPositions = new Vector3[mPositions.Length];
 
-       
+        Debug.AssertFormat(mPositions.Length == mMesh.vertexCount, "Vertex count is wrong");
+
         for (int row = 0; row < Rows; row++)
         {
             for (int col = 0; col < Columns; col++)
             {
-                mPositions[row * Columns + col] = new Vector3(col / (float)Columns , 0.0f, 1 - (row - 1) / (float)Rows);
+                mPositions[row * Columns + col] = new Vector3(col / (float)Columns, 0.0f, 1 - (row - 1) / (float)Rows);
                 mPrevPositions[row * Columns + col] = mPositions[row * Columns + col];
                 mAccelerations[row * Columns + col] = Vector3.zero;
                 mOriginalPositions[row * Columns + col] = mPositions[row * Columns + col];
-                
+
                 // Top
                 if (row > 0)
                     mSprings.Add(new Spring(RCToIdx(row - 1, col), RCToIdx(row, col), mPositions));
@@ -125,26 +127,36 @@ public class MassSpringCloth2 : MonoBehaviour
             var prev = mPrevPositions[i];
 
             //curr = curr + (curr - prev) * (1.0f - Damping) + mVertices[i].Acceleration * Time.fixedDeltaTime * 0.1f;
-            curr = curr + (curr - prev) * (1.0f - Damping) + mAccelerations[i] * Time.fixedDeltaTime * Time.fixedDeltaTime;
+            curr = curr + (curr - prev) * (1.0f - Damping) + mAccelerations[i] * Time.fixedDeltaTime;
 
             mPrevPositions[i] = mPositions[i];
             mPositions[i] = curr;
 
             mAccelerations[i] = Vector3.zero;
-
         }
 
-        //mMesh.vertices = mPositions;
-        
+        CollideWithSphere(mSphereCollider);
+
+        mMesh.vertices = mPositions;
+        mMesh.RecalculateNormals();
+
 
 
         var steps = Columns / 5;
-        for (int i = 0; i < steps; i++)
+        for (int i = mPositions.Length - 1; i >= mPositions.Length - steps; i--)
         {
             mPositions[i] = mOriginalPositions[i];
-            mPositions[i + steps * 2] = mOriginalPositions[i + steps * 2];
-            mPositions[i + steps * 4] = mOriginalPositions[i + steps * 4];
+            mPositions[i - steps * 2] = mOriginalPositions[i - steps * 2];
+            mPositions[i - steps * 4] = mOriginalPositions[i - steps * 4];
         }
+
+        //var steps = Columns / 5;
+        //for (int i = 0; i < steps; i++)
+        //{
+        //    mPositions[i] = mOriginalPositions[i];
+        //    mPositions[i + steps * 2] = mOriginalPositions[i + steps * 2];
+        //    mPositions[i + steps * 4] = mOriginalPositions[i + steps * 4];
+        //}
 
         // Lock top corners.
         // Top Left
@@ -165,6 +177,21 @@ public class MassSpringCloth2 : MonoBehaviour
         //mVertices[Rows * Columns - 1] = mInitialVertices[Rows * Columns - 1];
         // Top Right
         //mVertices[Rows * Columns - Columns] = mInitialVertices[Rows * Columns - Columns];
+    }
+
+    private void CollideWithSphere(SphereCollider collider)
+    {
+        var localCollider = transform.InverseTransformPoint(collider.transform.position);
+        var scaledRadius = collider.transform.localScale.x * collider.radius;
+        for (int i = 0; i < mPositions.Length; i++)
+        {
+            var dist = mPositions[i] - localCollider;
+            var length = dist.magnitude;
+            if (length < scaledRadius)
+            {
+                mPositions[i] += dist.normalized * (scaledRadius - length);
+            }
+        }
     }
 
     public void OnDrawGizmos()
@@ -189,7 +216,7 @@ public class MassSpringCloth2 : MonoBehaviour
             var spring = mSprings[i];
             var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
             var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
-            Gizmos.DrawLine(v1World, v2World);
+            //Gizmos.DrawLine(v1World, v2World);
         }
 
         // Essentially just drawing the mesh here with gizmos, just so I don't have to deal with the mesh itself.
