@@ -1,0 +1,131 @@
+%% This document gives an example on how to use the ntnumasterthesis
+%% LaTeX document class.
+
+%% Use short name MACS, MIS, CIMET, MTDMT, MIXD or MIS  
+%% Language english or norsk
+%% b5paper with oneside or twoside, you can set A4 if you want but you submit in b5
+
+%% If you want print with the heading material on a4 paper you can use this format
+%% \documentclass[MACS,english,a4paper,oneside,12pt]{ntnuthesis/ntnuthesis}
+
+%% with the change to using DAIM we have a new option. include DAIM after english below removes the front page material so that you can then submit in the DAIM system. If you are wanting the front material remove DAIM and make sure you fill in the DaimData.tex file.
+\documentclass[MACS,english]{ntnuthesis/ntnuthesis}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}     % For utf8 encoded .tex files allows norwegian characters in the files. This can be dangerous if you change to a differnt editor.
+%\usepackage[pdftex]{graphicx, hyperref}   % For cross references in pdf
+\usepackage{graphicx}
+\usepackage{hyperref}   % For cross references in pdf
+
+% For smart references 
+%    use \cref{label} and Caption and Number will be added automatically
+\usepackage[capitalise,noabbrev]{cleveref} 
+
+\usepackage{color}              % For colouring text 
+\hypersetup{colorlinks=true,     
+		linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
+    citecolor=blue,        % color of links to bibliography
+    filecolor=blue,      % color of file links
+    urlcolor=blue           % color of external links
+		}
+\usepackage{csvsimple}  % for simple table reading and display
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{gnuplottex} %miktex option if using miktex on windows
+\usepackage{rotating}
+
+
+\definecolor{darkgreen}{rgb}{0,0.5,0}
+\definecolor{darkred}{rgb}{0.5,0.0,0}
+
+\lstset{        basicstyle=\ttfamily,
+                keywordstyle=\color{blue}\ttfamily,
+                stringstyle=\color{darkred}\ttfamily,
+                commentstyle=\color{darkgreen}\ttfamily,
+}
+
+
+%Typesetting of C++ but not always stable in titles etc...
+\newcommand{\CPP}[0]{{C\nolinebreak[4]\hspace{-.1em}\raisebox{.1ex}{\small\bf +\hspace{-.1em}+\ }}}
+
+%\usepackage[table]{xcolor}% http://ctan.org/pkg/xcolor
+%\usepackage[nomessages]{fp}
+%\newlength{\maxbarlen}
+
+
+\newcommand\databar[3][gray!20]{%
+  \FPeval\result{round(#3/#2:4)}%
+  \rlap{\textcolor{#1}{\hspace*{\dimexpr-\tabcolsep+.5\arrayrulewidth}%
+        \rule[-.05\ht\strutbox]{\result\maxbarlen}{.95\ht\strutbox}}}%
+  \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
+
+
+
+\newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
+%\renewcommand{\com}[1]{} %remove starting % to remove supervisor comments
+% This will appear in text \com{Lecuters comment} and be visible unless you uncomment
+% the renewcommand line.
+
+\newcommand{\todo}[1]{{\color{green}#1}} % items to do
+%\renewcommand{\todo}[1]{} %remove starting % to remove items to do
+
+\newcommand{\n}[1]{{\color{blue}#1}} % other comment
+%\renewcommand{\n}[1]{} %remove starting % to remove notes
+
+\newcommand{\dn}[1]{} % add the d to a note to say that you have finished with it.
+
+
+
+
+
+% Set to true ONLY if using Harvard citation style
+\newboolean{HarvardCitations}
+\setboolean{HarvardCitations}{false} % false for computer science, true for interaction design and harvard style
+
+
+\ifthenelse{\boolean{HarvardCitations}}{%
+	\usepackage{natbib} % for Harvard names as citations.
+}{%
+	\usepackage[numbers]{natbib} % for Vancover numbers in bibliography
+}
+
+\newcommand{\q}[1]{\leavevmode\marginpar{\small\em #1}}
+\renewcommand{\q}[1]{}
+
+
+\begin{document}
+
+\input{inc/DaimData} % this is the file which contains all the details about your thesis
+\makefrontpages % make the frontpages
+\input{inc/mastersIntro}
+
+\tableofcontents
+
+\hypersetup{pageanchor=true}
+
+% Comment with a percent to remove figures or tables:
+\listoffigures
+\listoftables
+\lstlistoflistings
+
+
+\include{inc/introduction} % includes latex files from the same directory
+\include{inc/packages} % could be called Methodology or methods or any filename 
+\include{inc/structure} % could be results
+\include{inc/implementation}
+\include{inc/discussion}
+\include{inc/conclusion}
+
+\ifthenelse{\boolean{HarvardCitations}}{%
+	\bibliographystyle{agsm} % used for Harvard style references. Names - Humanities & Interaction Design
+}{%
+	\bibliographystyle{ntnuthesis/ntnuthesis} %used for Vancover style references. Numbers - Computer Science & Physics
+}
+
+\bibliography{MastersExample}
+
+\appendix
+\include{inc/rawdata}
+%\include{inc/timetable}
+
+\end{document}
