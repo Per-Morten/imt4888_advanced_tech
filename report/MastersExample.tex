@@ -21,7 +21,7 @@
 %    use \cref{label} and Caption and Number will be added automatically
 \usepackage[capitalise,noabbrev]{cleveref} 
 
-\usepackage{color}              % For colouring text 
+\usepackage[dvipsnames]{xcolor}              % For colouring text 
 \hypersetup{colorlinks=true,     
 		linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
     citecolor=blue,        % color of links to bibliography
@@ -44,6 +44,7 @@
                 commentstyle=\color{darkgreen}\ttfamily,
 }
 
+\include{inc/latex_util}
 
 %Typesetting of C++ but not always stable in titles etc...
 \newcommand{\CPP}[0]{{C\nolinebreak[4]\hspace{-.1em}\raisebox{.1ex}{\small\bf +\hspace{-.1em}+\ }}}
@@ -60,12 +61,12 @@
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
 \newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
-\renewcommand{\todo}[1]{}
+%\renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
-\renewcommand{\rephrase}[1]{}
+%\renewcommand{\rephrase}[1]{}
 \newcommand{\think}[1]{{\color{Orchid} #1\\}}
-\renewcommand{\think}[1]{}
+%\renewcommand{\think}[1]{}
 
 
 \newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
@@ -125,7 +126,7 @@
     \end{itemize}
 }
 
-
+\think{ Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
 
 \include{inc/introduction} % includes latex files from the same directory
 \include{report/inc/problem_description} % could be called Methodology or methods or any filename 
