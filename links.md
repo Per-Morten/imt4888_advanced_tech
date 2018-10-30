@@ -1,1 +1,9 @@
+https://catlikecoding.com/unity/tutorials/mesh-deformation/
 https://rivten.github.io/2018/08/03/graphics-article-list.html
+https://viscomp.alexandra.dk/?p=147
+https://www.cs.rpi.edu/~cutler/classes/advancedgraphics/S14/lectures/06_mass_spring_systems.pdf
+https://www.scss.tcd.ie/~manzkem/CS7057/cs7057-1516-14-MassSpringSystems-mm.pdf
+http://cs.ucsb.edu/~yunteng.cs/springs.html
+https://creativecoding.soe.ucsc.edu/courses/cs488/finalprojects/cloth/cloth.pdf
+http://www.cs.cmu.edu/afs/cs/academic/class/15462-s13/www/lec_slides/Jakobsen.pdf
+https://gafferongames.com/post/integration_basics/
