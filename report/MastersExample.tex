@@ -21,7 +21,7 @@
 %    use \cref{label} and Caption and Number will be added automatically
 \usepackage[capitalise,noabbrev]{cleveref} 
 
-\usepackage{color}              % For colouring text 
+\usepackage[dvipsnames]{xcolor}              % For colouring text 
 \hypersetup{colorlinks=true,     
 		linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
     citecolor=blue,        % color of links to bibliography
@@ -44,6 +44,7 @@
                 commentstyle=\color{darkgreen}\ttfamily,
 }
 
+\include{inc/latex_util}
 
 %Typesetting of C++ but not always stable in titles etc...
 \newcommand{\CPP}[0]{{C\nolinebreak[4]\hspace{-.1em}\raisebox{.1ex}{\small\bf +\hspace{-.1em}+\ }}}
@@ -59,6 +60,13 @@
         \rule[-.05\ht\strutbox]{\result\maxbarlen}{.95\ht\strutbox}}}%
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
+\newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
+%\renewcommand{\todo}[1]{}
+
+\newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
+%\renewcommand{\rephrase}[1]{}
+\newcommand{\think}[1]{{\color{Orchid} #1\\}}
+%\renewcommand{\think}[1]{}
 
 
 \newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
@@ -66,7 +74,7 @@
 % This will appear in text \com{Lecuters comment} and be visible unless you uncomment
 % the renewcommand line.
 
-\newcommand{\todo}[1]{{\color{green}#1}} % items to do
+%\newcommand{\todo}[1]{{\color{green}#1}} % items to do
 %\renewcommand{\todo}[1]{} %remove starting % to remove items to do
 
 \newcommand{\n}[1]{{\color{blue}#1}} % other comment
@@ -104,17 +112,29 @@
 \hypersetup{pageanchor=true}
 
 % Comment with a percent to remove figures or tables:
-\listoffigures
-\listoftables
-\lstlistoflistings
+%\listoffigures
+%\listoftables
+%\lstlistoflistings
+\think
+{
+    Topics to cover:
+    \begin{itemize}
+        \item Cover mesh deformation as springs
+        \item Cover mesh manipulation as physical objects with constraints (cloth)
+        \item Comment on both kinetic and dynamic
+        \item Cover Doing it on the CPU, doing it on the GPU (in Shaders)
+    \end{itemize}
+}
 
+\think{ Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
 
 \include{inc/introduction} % includes latex files from the same directory
-\include{inc/packages} % could be called Methodology or methods or any filename 
-\include{inc/structure} % could be results
-\include{inc/implementation}
-\include{inc/discussion}
-\include{inc/conclusion}
+\include{report/inc/problem_description} % could be called Methodology or methods or any filename 
+\include{report/inc/implementation}
+%\include{inc/structure} % could be results
+%\include{inc/implementation}
+%\include{inc/discussion}
+%\include{inc/conclusion}
 
 \ifthenelse{\boolean{HarvardCitations}}{%
 	\bibliographystyle{agsm} % used for Harvard style references. Names - Humanities & Interaction Design

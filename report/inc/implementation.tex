@@ -1,57 +1,100 @@
 \chapter{Implementation}
 \label{chap:implementation}
-This has the description of how you actually went about implementing the project.  This should be focused on the interesting challenges and how those related to the project.
+\todo{Talk about how the deformation is done without mentioning springs first. I.e. you apply force to it.}
+\todo{Also mention the importance of damping.}
+\todo{Discuss semi-implicit euler integration scheme. Show math and implementation, discuss advantages and disadvantages with it.}
 
-There is often the need to layout tables that are long.  We suggest using the sidewaystable mode for this.  You will need to manage the total width of the table to make it fit, but you can see how to do that in the example in Table~\ref{tbl:CBM-MC}.
+\section{Semi-Implicit Euler Integration}
 
-Writing your own \LaTeX{} tables is very slow, and error prone. There are many converstion tools to help create tables.  The one we used for the sideways table, Table~\ref{tbl:CBM-MC} is LatexKit\footnote{Google plugin for LatexKit \url{https://chrome.google.com/webstore/detail/latexkit/piadpbgaacpbaicjilhfebbfgofomiic}}
+\section{Spring Mesh Damping}
+The spring mesh damping model is usually presented in a quite intuitive manner. 
+Each vertex within a mesh is considered a point with its own mass. 
+Between the vertices are springs which try to hold the whole mesh together.
+When no forces are applied to the vertices within the model, the length of the springs are in their desired \rephrase{"resting" state.}
+When a forces are applied to the vertices and they start moving, the springs holding the vertices together will become stretched
+and will try to get back to their resting state.
 
+\todo{Add image}
 
+\section{Implicit Springs - Ball Deformation}
+\todo{Add video}
+\todo{Add how force is applied, showing the picture from the tutorial}
+Jasper Flick\cite{catlike_mesh_deformation} shows an implementation \rephrase{without explicit springs}, following a semi-implicit euler integration scheme. 
+In this implementation we keep a copy of the initial vertex positions, as well as a collection of the modified vertices.
+Additionally, we keep a collection of the velocity of each vertex, which we update each time force is added to a vertex.
+The springs come into play when updating the positions of all the vertices based on their velocities.
+Each spring within this system is the vector between the initial positions of the vertices in the mesh and their current positions, as seen in figure \ref{fig:catlike_mesh_deformation_springs}.
+Upon update of the vertices the force of a spring is applied to the velocity of a vertex in the direction of the spring, moving the vertex back towards its initial position (see listing~\ref{code:catlike_mesh_deformation_update}).
 
-% you can also set widths using a new command 
-%\newcommand{\Colwidth}{0.08\textwidth}
-%\begin{tabular}{l|p{\Colwidth}|p{\Colwidth}|p{\Colwidth}|p{\Colwidth}|p{\Colwidth}|p{\Colwidth}|p{\Colwidth}|p{\Colwidth}|}
-
-\begin{sidewaystable}
-\small{
-\begin{tabular}{l|cccccccccccccccccc}
-Candidate & 1 & 2 & 3 & 4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13 & 14 & 15 & Num & CBM & Diff. \\
-\hline
-10001 & 0 & -0.5 & 1 & -0.5 & 1 & -0.5 & -0.5 & 2 & 2 & -2 & 2 & 1.5 & -0.5 & 2 & 2 & 8 & 9 & 0.5 \\
-10002 & 0 & 2 & 0 & 0 & 0 & 2 & 2 & 2 & 1 & 1 & 1 & 2 & 0 & 2 & 2 & 10 & 17 & 4.5 \\
-10003 & 0 & 2 & -0.5 & 0 & 0 & 2 & 1.5 & 1.5 & 2 & -0.5 & 2 & 1 & 0 & 1.5 & 1.5 & 9 & 14 & 3.5 \\
-10004 & 2 & -0.5 & 1 & 0 & 0 & 0 & 2 & 2 & 1 & 0 & 0 & 1 & -0.5 & 1 & -0.5 & 7 & 8.5 & 1.5 \\
-10005 & 1 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 1 & 1 & 1 & 1 & 0 & 1 & 1 & 9 & 9 & -1.5 \\
-10006 & 2 & -2 & 0 & -0.5 & 1.5 & 1 & 0 & 2 & 2 & 0 & 2 & 2 & -0.5 & 2 & 2 & 9 & 13.5 & 3 \\
-10007 & 1 & -2 & 0 & 0 & 1 & 0 & 1.5 & 2 & 2 & -2 & 0 & 1.5 & -2 & 2 & 1 & 8 & 6 & -2.5 \\
-10008 & 2 & 2 & -2 & 0 & 2 & 0 & 2 & 2 & 1.5 & 1.5 & 2 & 1.5 & -0.5 & 2 & 2 & 11 & 18 & 3.5 \\
-10009 & 2 & -0.5 & 1 & 0 & -0.5 & 2 & -0.5 & 2 & 2 & 0 & 2 & 2 & -0.5 & -0.5 & 2 & 8 & 12.5 & 4 \\
-10010 & 2 & -2 & 2 & 0 & -2 & 2 & 2 & 2 & 1.5 & 1.5 & 1.5 & 2 & 0 & 2 & 2 & 11 & 16.5 & 2 \\
-10011 & 2 & 2 & 0 & 1 & 2 & 2 & 2 & -0.5 & 2 & 0 & 2 & 2 & -0.5 & 2 & 2 & 11 & 20 & 5.5 \\
-10012 & 2 & 1 & 0 & 2 & -2 & 2 & 2 & 2 & 2 & 0 & 1 & 2 & 0 & 2 & 2 & 11 & 18 & 3.5 \\
-10013 & 2 & 2 & 1.5 & 0 & 0 & 2 & 2 & 2 & 1 & 0 & 1 & 2 & -0.5 & 2 & 2 & 11 & 19 & 4.5 \\
-10014 & 2 & 2 & 1 & -0.5 & -2 & -2 & 1.5 & 2 & 2 & 1.5 & 2 & 2 & 2 & -0.5 & 2 & 11 & 15 & 0.5 \\
-10015 & 1.5 & -2 & 1.5 & 1.5 & 2 & 0 & 2 & 2 & 1.5 & 1 & 2 & -0.5 & 1 & 0 & 1.5 & 11 & 15 & 0.5 \\
-10016 & 1 & 2 & 0 & 0 & 1.5 & 0 & 0 & 2 & 1 & 0 & 1 & 1.5 & -0.5 & 1 & 2 & 9 & 12.5 & 2 \\
-10018 & 2 & 2 & 1 & 0 & -2 & 0 & -2 & 1.5 & 2 & 1 & 0 & 1.5 & 0 & 1 & 2 & 9 & 10 & -0.5 \\
-10019 & 2 & 2 & -2 & 0 & 1.5 & 2 & -0.5 & -0.5 & 1.5 & 1 & 2 & 2 & 0 & 1 & 2 & 10 & 14 & 1.5 \\
-10020 & 2 & 2 & 0 & 0 & 2 & 2 & 2 & 2 & -0.5 & 1 & 2 & 2 & 2 & 2 & 2 & 12 & 22.5 & 4.5 \\
-\end{tabular}
-}
-\caption[Confidence Based Marking]{Multichoice marking example data with 15 questions, Number correct (Num), the Confidence Based Marking (CBM) grade,  and the differentiation of knowledge quality (Diff)}
-\label{tbl:CBM-MC}
-
-\end{sidewaystable}
-
-%\begin{sidewaystable}
+\begin{figure}
 %\centering
-%  \csvautobooktabular{figures/largeTable.csv}
-%\caption[Autogenerated on Sideways page]{using CSV tables to autogenerate the table in a sideways table. This is not an appropriate use of a sideways table as it is small}
-%\label{tbl:dataSetsideways}
-%\end{sidewaystable}
+    \includegraphics[width=\textwidth]{report/figures/catlike_mesh_deformation_springs.png}
+    \caption{Modified vertices(yellow) are pulled towards their original position(blue) by the springs (pink)\cite{catlike_mesh_deformation}}
+    \label{fig:catlike_mesh_deformation_springs}
+\end{figure}
+
+\begin{figure}
+\begin{lstlisting}[label={code:catlike_mesh_deformation_update},language=csharp,caption={Catlike coding mesh deformation vertex update}]
+private void UpdateVertex(int i)
+{
+    Vector3 velocity = mVertexVelocities[i];
+    Vector3 spring = mDisplacedVertices[i] - mOriginalVertices[i];
+    spring *= UniformScale; 
+    velocity -= spring * SpringForce * Time.deltaTime;
+    velocity *= 1f - Damping * Time.deltaTime;
+    mVertexVelocities[i] = velocity;
+    mDisplacedVertices[i] += velocity * (Time.deltaTime / UniformScale);
+}
+\end{lstlisting}
+\end{figure}
+
+\subsection{Usage}
+As seen from the video, although simple, the implementation provides quite a lot of flexibility, toying with the different variables 
+can lead to some interesting visual effects. 
+For example, applying negative force to the sphere can be used to create a visual effect similar to that of a star being swallowed by a black hole.
+Applying outward force from the inside of the model can create a relatively convincing effect of something moving around inside the object.
+Giving the sphere a high SpringForce will lead to it being harder to deform, and more bouncy when trying to return to its original shape.
+
+\subsection{Limitations}
+As previously mentioned the implementation is quite simple, but has some limitations. 
+As mentioned by Flick\cite{catlike_mesh_deformation} this implementation is not a physics simulation, while the mesh is deformed
+the colliders and physical representation of the object stays the same.
+Additionally, none of the vertices are connected to each other through springs, and therefore move completely independent from each other. 
+This means that if we were to for instance pin two of the vertices to their initial position, and then apply force to the mesh
+none of the other vertices would respect that two of them was locked in place, leading to less than satisfying results.
+
+\section{Verlet Integration}
+\todo{Discuss Verlet Integration}
+
+\section{Explicit Springs - Cloth Simulation}
+Cloth simulation is a place where the springs are more apparent than the previous implementation.
+The implementation seen in Figure \ref{fig:my_cloth_implementation_springs} shows all the springs needed to create a believable cloth simulation.
+The implementation is based on the implementation shown by Jesper Mosegaard\cite{mosegaards_clothing_simulation}.
+Unlike the previous implementation, the springs here are explicit and ensure that vertices are not handled in isolation but rather are affected by the other vertices in the system.
+This gives greater control in that it allows you to apply force to a specific vertex and the whole system responds, rather than having to apply the force to all the vertices.
+\think{Need to start to segue into the spring types}
+
+\todo{Find the gamasutra article that discussed this}
+
+
+\begin{figure}
+%\centering
+    \caption{\todo{Insert figure}}
+    \label{fig:my_cloth_implementation_springs}
+\end{figure}
+
+
+\subsection{Spring Types}
+\subsubsection{Structural Springs}
+
+\subsubsection{Shear Springs}
+
+\subsubsection{Bending Springs}
 
 
 
-\todo{add more here. if you are reading this you can see that I am using todo as a way to indicate where the updates should be}
+\todo{We should be able to cut the cloth mesh without any problems right? as long as we "cut" along the triangles, so that no triangle reference a part that has been cut off}
 
 
+
+\todo{The technology ahead, ask if this could be used with tesselation and be done on the GPU?}
