@@ -58,8 +58,6 @@ public class MassSpringCloth2
         filter.mesh = Procedural.GenerateNonInclusivePlaneMesh(Rows, Columns);
         mMesh = filter.mesh;
 
-
-        // TODO: Create a mesh for this, so we can see proper cloth =D
         mPositions = new Vector3[Rows * Columns];
         mPrevPositions = new Vector3[mPositions.Length];
         mAccelerations = new Vector3[mPositions.Length];
@@ -76,6 +74,7 @@ public class MassSpringCloth2
                 mAccelerations[row * Columns + col] = Vector3.zero;
                 mOriginalPositions[row * Columns + col] = mPositions[row * Columns + col];
 
+                // Strutcural Springs
                 // Top
                 if (row > 0)
                     mSprings.Add(new Spring(RCToIdx(row - 1, col), RCToIdx(row, col), mPositions));
@@ -84,6 +83,7 @@ public class MassSpringCloth2
                 if (col > 0)
                     mSprings.Add(new Spring(RCToIdx(row, col - 1), RCToIdx(row, col), mPositions));
 
+                // Shear Springs
                 // Top Left
                 if (row > 0 && col > 0)
                     mSprings.Add(new Spring(RCToIdx(row - 1, col - 1), RCToIdx(row, col), mPositions));
@@ -91,6 +91,14 @@ public class MassSpringCloth2
                 // Top Right
                 if (row > 0 && col < Columns - 1)
                     mSprings.Add(new Spring(RCToIdx(row - 1, col + 1), RCToIdx(row, col), mPositions));
+
+                //// Bending Springs
+                // Top skip 1
+                if (row > 1)
+                    mSprings.Add(new Spring(RCToIdx(row - 2, col), RCToIdx(row, col), mPositions));
+
+                if (col > 1)
+                    mSprings.Add(new Spring(RCToIdx(row, col - 2), RCToIdx(row, col), mPositions));
             }
         }
     }
@@ -101,8 +109,29 @@ public class MassSpringCloth2
         for (int i = 0; i < mAccelerations.Length; i++)
         {
             mAccelerations[i] += (Gravity / VertexMass);
+            var pos = mPositions[i];
+
+           // Wind
+           //mAccelerations[i] += new Vector3(
+           //                                    Mathf.Sin(Mathf.Cos(5 * pos.x * pos.y * pos.z)),
+           //                                    -Mathf.Cos(pos.z * Time.fixedDeltaTime),
+           //                                    Mathf.Sin(pos.x * pos.y * Time.fixedDeltaTime)
+           //                                );
         }
 
+        // Move particles
+        for (int i = 0; i < mPositions.Length; i++)
+        {
+            var curr = mPositions[i];
+            var prev = mPrevPositions[i];
+
+            curr = curr + (curr - prev) * (1.0f - Damping) + mAccelerations[i] * Time.fixedDeltaTime * Time.fixedDeltaTime;
+
+            mPrevPositions[i] = mPositions[i];
+            mPositions[i] = curr;
+
+            mAccelerations[i] = Vector3.zero;
+        }
 
         // Fix Constraints
         for (int step = 0; step < ConstraintIterations; step++)
@@ -117,28 +146,11 @@ public class MassSpringCloth2
                 mPositions[spring.V1Idx] += correction;
                 mPositions[spring.V2Idx] -= correction;
             }
-
-        }
-
-        // Move particles
-        for (int i = 0; i < mPositions.Length; i++)
-        {
-            var curr = mPositions[i];
-            var prev = mPrevPositions[i];
-
-            //curr = curr + (curr - prev) * (1.0f - Damping) + mVertices[i].Acceleration * Time.fixedDeltaTime * 0.1f;
-            curr = curr + (curr - prev) * (1.0f - Damping) + mAccelerations[i] * Time.fixedDeltaTime;
-
-            mPrevPositions[i] = mPositions[i];
-            mPositions[i] = curr;
-
-            mAccelerations[i] = Vector3.zero;
         }
 
         CollideWithSphere(mSphereCollider);
 
-        mMesh.vertices = mPositions;
-        mMesh.RecalculateNormals();
+
 
 
 
@@ -146,9 +158,11 @@ public class MassSpringCloth2
         for (int i = mPositions.Length - 1; i >= mPositions.Length - steps; i--)
         {
             mPositions[i] = mOriginalPositions[i];
-            mPositions[i - steps * 2] = mOriginalPositions[i - steps * 2];
+            //mPositions[i - steps * 2] = mOriginalPositions[i - steps * 2];
             mPositions[i - steps * 4] = mOriginalPositions[i - steps * 4];
         }
+
+        //mPositions[(Rows / 2) * Columns + (Columns / 2)] = mOriginalPositions[(Rows / 2) * Columns + (Columns / 2)];
 
         //var steps = Columns / 5;
         //for (int i = 0; i < steps; i++)
@@ -177,6 +191,10 @@ public class MassSpringCloth2
         //mVertices[Rows * Columns - 1] = mInitialVertices[Rows * Columns - 1];
         // Top Right
         //mVertices[Rows * Columns - Columns] = mInitialVertices[Rows * Columns - Columns];
+
+        mMesh.vertices = mPositions;
+        mMesh.RecalculateNormals();
+
     }
 
     private void CollideWithSphere(SphereCollider collider)
@@ -194,29 +212,32 @@ public class MassSpringCloth2
         }
     }
 
+
     public void OnDrawGizmos()
     {
         if (mPositions == null)
             return;
 
         // Draw Vertices
-        //Gizmos.color = Color.black;
-        //for (int i = 0; i < mVertices.Length; i++)
-        //{
-        //    var vertexWorld = transform.TransformPoint(mVertices[i].Position);
-        //    Gizmos.color = Color.black;
-        //    Gizmos.DrawSphere(vertexWorld, 0.01f);
-        //    Gizmos.color = Color.yellow;
-        //    Handles.Label(vertexWorld, $"{i}");
-        //}
+        Gizmos.color = Color.black;
+        for (int i = 0; i < mPositions.Length; i++)
+        {
+            var vertexWorld = transform.TransformPoint(mPositions[i]);
+            Gizmos.color = Color.black;
+            Gizmos.DrawSphere(vertexWorld, 0.01f);
+            //Gizmos.color = Color.yellow;
+            //Handles.Label(vertexWorld, $"{i}");
+        }
 
         // Draw all the springs
+        Gizmos.color = Color.white;
+
         for (int i = 0; i < mSprings.Count; i++)
         {
             var spring = mSprings[i];
             var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
             var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
-            //Gizmos.DrawLine(v1World, v2World);
+            Gizmos.DrawLine(v1World, v2World);
         }
 
         // Essentially just drawing the mesh here with gizmos, just so I don't have to deal with the mesh itself.
