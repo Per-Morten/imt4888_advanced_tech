@@ -68,6 +68,21 @@ none of the other vertices would respect that two of them was locked in place, l
 
 \section{Explicit Springs - Cloth Simulation}
 Cloth simulation is a place where the springs are more apparent than the previous implementation.
+The implementation seen in Figure \ref{fig:my_cloth_implementation_springs} shows all the springs needed to create a believable cloth simulation.
+The implementation is based on the implementation shown by Jesper Mosegaard\cite{mosegaards_clothing_simulation}.
+Unlike the previous implementation, the springs here are explicit and ensure that vertices are not handled in isolation but rather are affected by the other vertices in the system.
+This gives greater control in that it allows you to apply force to a specific vertex and the whole system responds, rather than having to apply the force to all the vertices.
+\think{Need to start to segue into the spring types}
+
+\todo{Find the gamasutra article that discussed this}
+
+
+\begin{figure}
+%\centering
+    \caption{\todo{Insert figure}}
+    \label{fig:my_cloth_implementation_springs}
+\end{figure}
+
 
 \subsection{Spring Types}
 \subsubsection{Structural Springs}
