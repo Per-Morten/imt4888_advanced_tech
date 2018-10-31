@@ -1,7 +1,7 @@
 %% This document gives an example on how to use the ntnumasterthesis
 %% LaTeX document class.
 
-%% Use short name MACS, MIS, CIMET, MTDMT, MIXD or MIS  
+%% Use short name MACS, MIS, CIMET, MTDMT, MIXD or MIS
 %% Language english or norsk
 %% b5paper with oneside or twoside, you can set A4 if you want but you submit in b5
 
@@ -17,12 +17,12 @@
 \usepackage{graphicx}
 \usepackage{hyperref}   % For cross references in pdf
 
-% For smart references 
+% For smart references
 %    use \cref{label} and Caption and Number will be added automatically
-\usepackage[capitalise,noabbrev]{cleveref} 
+\usepackage[capitalise,noabbrev]{cleveref}
 
-\usepackage[dvipsnames]{xcolor}              % For colouring text 
-\hypersetup{colorlinks=true,     
+\usepackage[dvipsnames]{xcolor}              % For colouring text
+\hypersetup{colorlinks=true,
 		linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
     citecolor=blue,        % color of links to bibliography
     filecolor=blue,      % color of file links
@@ -115,9 +115,15 @@
 %\listoffigures
 %\listoftables
 %\lstlistoflistings
+
+\section{Color legend}
+\todo{TODO Comments}
+\rephrase{Should be rephrased}
+\think{General thoughts}
+
 \think
 {
-    Topics to cover:
+    Possible topics to cover:
     \begin{itemize}
         \item Cover mesh deformation as springs
         \item Cover mesh manipulation as physical objects with constraints (cloth)
@@ -127,9 +133,12 @@
 }
 
 \think{ Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
+\think{Should I focus more on the usage of mass spring models, and discuss what they can be used for, i.e. not just going for mesh manipulation, but also other types of physical simulations?}
+
+\todo{Add link to repo! Invite Simon to the Repo}
 
 \include{inc/introduction} % includes latex files from the same directory
-\include{report/inc/problem_description} % could be called Methodology or methods or any filename 
+\include{report/inc/problem_description} % could be called Methodology or methods or any filename
 \include{report/inc/implementation}
 %\include{inc/structure} % could be results
 %\include{inc/implementation}
