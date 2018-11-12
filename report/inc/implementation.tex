@@ -1,15 +1,19 @@
 \chapter{Implementation}
 \label{chap:implementation}
+When implementing a real time mesh deformation system certain choices must be made.
+Firstly one must decide upon the model to use for the mesh deformation itself, i.e. are we algorithmically solving these problems using proper physics, or do we more brute force it through particle simulation. The algorithmic approach using proper physics will usually yield more realistic results, however, they are usually more complicated to implement,
+and might not meet the performance requirements of games. The more brute force approaches such as spring-mass spring systems are usually easier to implement,
+and gives good enough results.
+Following the decision of models we need to decide on an integration scheme, how should we model the changes in acceleration, position, and velocity of our vertices?
+Many different integration schemes exits, such as explicit Euler integration, Runge Kutta, or Verlet Intergration, all with different properties and difficulty of implementation.
+Following these choices it is possible to start implementing a mesh deformation system.
+
 \todo{Talk about how the deformation is done without mentioning springs first. I.e. you apply force to it.}
 \todo{Also mention the importance of damping.}
 \todo{Discuss semi-implicit euler integration scheme. Show math and implementation, discuss advantages and disadvantages with it.}
 \todo{Motivate that you choose both your "physics model" and your integration scheme}
 
-\section{Semi-Implicit Euler Integration}
-\subsection{Advantages}
-\subsection{Disadvantages}
-
-\section{Spring Mass Damping}
+\section{What is Spring Mass Damping?}
 The spring mass damping model is usually presented in a quite intuitive manner.
 Each vertex within a mesh is considered a point with its own mass.
 Between the vertices are springs which try to hold the whole mesh together.
@@ -18,6 +22,35 @@ When a forces are applied to the vertices and they start moving, the springs hol
 and will try to get back to their resting state.
 
 \todo{Add image}
+
+\section{What is Semi-Implicit Euler Integration?}
+Semi-Implicit Euler integration is perhaps the integration scheme that is easiest to follow, and comes most natural to programmers when they implement
+movement in a realtime system for the first time. It is also a scheme used within a lot of physics engines\cite{gafferongames_integration}.
+In Semi-Implicit Euler integration we keep the total accumulated force, velocity and position of each game object.
+Upon each timestepped update of the system we divide all the force that has been applied to an object by the mass of the object to get the acceleration of the object.
+Multiplying this acceleration with the timestep yields the change in velocity of the object, which added on the previous velocity becomes the new velocity.
+This new velocity is then multiplied with the timestep and added to the position, reflecting the change in position over time.
+The code for this can be seen in listing~\ref{code:semi-implicit_euler}
+
+\begin{figure}
+\begin{lstlisting}[label={code:semi-implicit_euler},language=csharp,caption={Semi-Implicit Euler Integration}]
+private void Timestep(float deltaTime, GameObject go)
+{
+    var acceleration = go.force / go.mass;
+    go.velocity += acceleration * deltaTime;
+    go.position += go.velocity * deltaTime;
+}
+\end{lstlisting}
+\end{figure}
+
+\subsection{Advantages \& Disadvantages}
+The largest advantage of the Semi-Implicit Euler integration is its ease of implementation, as well as the generally low computational complexity.
+However, it is not entirely stable, meaning that you can get into situations where your numbers start exploding.
+
+\section{What is Verlet Integration?}
+Verlet integration 
+\subsection{Advantages}
+\subsection{Disadvantages}
 
 \section{Implicit Springs - Ball Deformation}
 \todo{Add video}
@@ -66,11 +99,11 @@ Additionally, none of the vertices are connected to each other through springs, 
 This means that if we were to for instance pin two of the vertices to their initial position, and then apply force to the mesh
 none of the other vertices would respect that two of them was locked in place, leading to less than satisfying results.
 
-\section{Verlet Integration}
-\subsection{Advantages}
-\subsection{Disadvantages}
+
+
 
 \section{Explicit Springs - Cloth Simulation}
+\todo{This is a kinematic system, not a dynamic one, so should rename all the springs reference to constraints?}
 Cloth simulation is a place where the springs are more apparent than the previous implementation.
 The implementation seen in Figure \ref{fig:my_cloth_implementation_springs} shows all the springs needed to create a believable cloth simulation.
 The implementation is based on that of Jesper Mosegaard\cite{mosegaards_clothing_simulation}.
