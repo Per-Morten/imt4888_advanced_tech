@@ -33,6 +33,7 @@
 \usepackage{booktabs}
 \usepackage{gnuplottex} %miktex option if using miktex on windows
 \usepackage{rotating}
+\usepackage{float}
 
 
 \definecolor{darkgreen}{rgb}{0,0.5,0}
@@ -64,10 +65,10 @@
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
 \newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
-\renewcommand{\todo}[1]{}
+%\renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
-\renewcommand{\rephrase}[1]{#1}
+%\renewcommand{\rephrase}[1]{#1}
 \newcommand{\think}[1]{{\color{Orchid} #1 }}
 \renewcommand{\think}[1]{}
 
@@ -147,9 +148,20 @@
     Mass spring competes with physics approaches
 }
 
+Structure:
+Introduction
+Problem Description
+Simple Mesh Manipulation like Rounding a cube (Done both on CPU and GPU) % Don't do this?
+Spring Mass Systems
+What can Spring Mass Be Used For?
+Sources
+* Include not just sources and good tutorials, but perhaps also that it can be wise to read up on mesh generation.
+Reflection
+
 \include{inc/introduction} % includes latex files from the same directory
 \include{report/inc/problem_description} % could be called Methodology or methods or any filename
-\include{report/inc/implementation}
+\include{report/inc/mass_spring_impl}
+\include{report/inc/usage}
 %\include{inc/structure} % could be results
 %\include{inc/implementation}
 %\include{inc/discussion}
