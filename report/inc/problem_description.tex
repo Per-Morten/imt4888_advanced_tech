@@ -1,13 +1,43 @@
 \chapter{Problem Description}
+\section{Description}
+Video Games are becoming more and more complicated with each new release, supporting different visual effects and physical simulation
+to enhance the player's immersion, among these effects are deformation. 
+Mesh deformation can happen in a lot of different cases, for instance in a car game, when cars crash into each other they might
+end up with a deformed model as a response to the collision. \todo{Add picture}
+Other examples are materials that are deformed upon interaction, like how the snow deforms in God of War\footnote{God of War Snow Deformation Video: \url{https://www.youtube.com/watch?v=BEgY9k89s3o}}, flags waving in the wind, or plants moving as characters collide with them, only to bounce back upon leaving the collision.
+
+Realistic mesh deformations has long existed in other mediums such as animated films.
+These mediums have the advantage that they can be rendered offline and rendering time of a couple of hours per frame
+it not considered a problem. Because of this films can make use of analytical real life physics models to create realistic behavior.
+In the case where they need to use approximations and computational models they can afford to spend a lot of time and resources on
+the simulation process, to end up with a satisfying result.
+However, this is not feasible within an interactive application, where the high framerates are a necessity for a functioning,
+comfortable and immersive experience. As a result games and other interactive mediums where total realism is not a necessity
+have looked at other solutions that create plausible results given the constraints of the environment.
+
+\section{Approaches}
+Several different approaches exists for mesh deformation.
+For example it is possible to offline pre-computations, i.e. create common deformations for collisions offline, and apply the deformation or switch to the model with the deformation upon collision. 
+This can be a good strategy in situations where the deformation will happen so fast the switch is unnoticeable to the user.
+An example here could be in the case of a high-speed car-crash, upon impact the user will probably not notice that the car they are sitting in instantly got deformed,
+rather than it happening by continuous collision with the other object, especially if the switch is covered a bit with some particle effects as a result of the collision.
+Ideally, if you pre-compute models you should try to ensure that there is enough variations so that the user feel that the different deformations are valid enough.
 
 
-\think
-{
-    \begin{itemize}
-        \item Done for various reasons: Collision response, animation, physics emulation.
-        \item Exist many solutions, with different levels of accuracy
-        \item Field can be intimidating due to all the math involved
-        \item Many solutions are really accurate, working well in film or non-realtime simulation
-        \item Games often need to sacrifice accuracy for speed.
-    \end{itemize}
+\think{
+* Where can this approach work well?
+    * In cases where the deformation happens so fast that the user don't really notice until it is finished
+    * Places where you have predictable deformations, or the user don't notice the repeat of them.
+    \cite{hauser2003interactive}
 }
+
+* Offline pre-computations (i.e. Create common deformations offline, and switch to those upon collision)
+    * Modal Analysis with Constraints \url{https://twvideo01.ubm-us.net/o1/vault/gdc04/slides/fast_yet_realistic.pdf} 
+* Finite Element Method
+    * Too resource demanding in 2002, might be better now
+* FDD (Free Form Deformation)
+* Mass Spring Systems
+
+https://books.google.no/books?id=6XQbiLDWQhsC&pg=PA1&lpg=PA1&dq=Spring+mass+systems+video+games&source=bl&ots=LWPn1_Ul-v&sig=3S5QHrHD370o5Vcbb2nLeuSg70A&hl=en&sa=X&ved=2ahUKEwi4trbuzNPeAhVGXCwKHTzDCoQ4ChDoATADegQICRAB#v=onepage&q=Spring%20mass%20systems%20video%20games&f=false
+
+

@@ -65,12 +65,12 @@
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
 \newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
-%\renewcommand{\todo}[1]{}
+\renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
 %\renewcommand{\rephrase}[1]{#1}
 \newcommand{\think}[1]{{\color{Orchid} #1 }}
-\renewcommand{\think}[1]{}
+%\renewcommand{\think}[1]{}
 
 
 \newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
@@ -130,7 +130,7 @@
     \begin{itemize}
         \item Human muscles can be modelled as spring system, brain sets desired spring length.
         \item Hybrid systems (Raw spring mass in just cause, but it is further fixed with algorithms)
-        \item Give an overview of the prep
+        \item Give an overview of the prep (Do in reflection)
         \item Cover mesh deformation as springs
         \item Cover mesh manipulation as physical objects with constraints (cloth)
         \item Bring up papers that I was pointed at which was hard to understand.
@@ -158,10 +158,13 @@ Sources
 * Include not just sources and good tutorials, but perhaps also that it can be wise to read up on mesh generation.
 Reflection
 
-\include{inc/introduction} % includes latex files from the same directory
+\include{report/inc/introduction} % includes latex files from the same directory
 \include{report/inc/problem_description} % could be called Methodology or methods or any filename
 \include{report/inc/mass_spring_impl}
 \include{report/inc/usage}
+\include{report/inc/future}
+\include{report/inc/sources}
+\include{report/inc/reflection}
 %\include{inc/structure} % could be results
 %\include{inc/implementation}
 %\include{inc/discussion}

@@ -296,7 +296,10 @@ Fisher suggests doing this with a marching cubes algorithm.
 However, that would potentially be more costly to simulate and to draw.
 Another extension could be self collision or collision with other soft bodies, however, this is very challenging to implement
 and quickly ends up being really expensive in terms of performance as well.
+Another extension would be to move these calculations over to the GPU, as a lot of the calculations that are done are data parallel,
+and would therefore benefit from being executed in a parallel environment.
 
+\todo{Bring up how an extension is to do this on a gpu}
 
 \todo{Should I also look into the Catlike Coding water deformation thingy, as it is another way of doing mesh deformation}
 
