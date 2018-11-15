@@ -3,26 +3,22 @@
 \label{chap:implementation}
 \todo{Think if this should be shortened}
 When implementing a real time mesh deformation system certain choices must be made.
-Firstly one must decide upon the model to use for the mesh deformation itself, i.e. are we algorithmically solving these problems using proper physics, or do we more brute force it through particle simulation. The algorithmic approach using proper physics will usually yield more realistic results, however, they are usually more complicated to implement,
-and might not meet the performance requirements of games. The more brute force approaches such as spring-mass spring systems are usually easier to implement,
-and gives good enough results.
+Firstly one must decide upon the model to use for the mesh deformation, the more brute-force spring mass system, rather than a more algorithmical approach using proper physics.
+As previously indicated we are working with a spring mass system for this implementation.
 Following the decision of models we need to decide on an integration scheme, how should we model the changes in acceleration, position, and velocity of our vertices?
 Many different integration schemes exits, such as explicit Euler integration, Runge Kutta, or Verlet Intergration, all with different properties and difficulty of implementation.
 Lastly we need to decide if we go for a kinematic system where we model springs as constraints, 
-or a dynamic system where we model the springs as proper springs working with Hooke's law\cite{math_for_games}.
+or a dynamic system where we model the springs as proper springs working with Hooke's law\cite{math_for_games}, both of which are presented within this chapter.
 Following these choices it is possible to start implementing a mesh deformation system.
 
 \todo{Talk about how the deformation is done without mentioning springs first. I.e. you apply force to it.}
 \todo{Also mention the importance of damping.}
 \todo{Motivate that you choose both your "physics model" and your integration scheme}
 
-\subsection{What is the Spring Mass Model?}
-The spring mass model is usually presented in a quite intuitive manner.
-Each vertex within a mesh is considered a point with its own mass.
-Between the vertices are springs which try to hold the whole mesh together.
-When no forces are applied to the vertices within the model, the length of the springs are in their desired "resting" state.
-When a forces are applied to the vertices and they start moving, the springs holding the vertices together will become stretched
-and will try to get back to their resting state\cite{catlike_mesh_deformation, mosegaards_clothing_simulation, provot_mass_spring}.
+\think{Firstly one must decide upon the model to use for the mesh deformation itself, i.e. are we algorithmically solving these problems using proper physics, or do we more brute force it through particle simulation. The algorithmic approach using proper physics will usually yield more realistic results, however, they are usually more complicated to implement,
+and might not meet the performance requirements of games. The more brute force approaches such as spring-mass spring systems are usually easier to implement,
+and gives good enough results.}
+
 
 %
 %\begin{figure}
@@ -81,6 +77,7 @@ Due to the velocity being calculated based on the positions, it is very hard to 
 meaning that the model is quite stable.
 I would however argue that while it is easy to implement it is not as easy to understand as the Semi-Implicit Euler integration, at least upon first contact with the model.
 I needed a proper intuitive explanation from Mosegaard\cite{mosegaards_clothing_simulation} before I understood what was really going on.
+Additionally, Verlet integration, at least with this implementation requires a fixed time step, otherwise the velocity calculation won't be correct~\cite{alan_wake_mass_spring}.
 
 \subsection{Kinematic or Dynamic approach?}
 When working with mesh deformation one needs to decide upon a kinematic or a dynamic approach.

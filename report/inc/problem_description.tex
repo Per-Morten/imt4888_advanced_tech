@@ -21,7 +21,25 @@ For example it is possible to offline pre-computations, i.e. create common defor
 This can be a good strategy in situations where the deformation will happen so fast the switch is unnoticeable to the user.
 An example here could be in the case of a high-speed car-crash, upon impact the user will probably not notice that the car they are sitting in instantly got deformed,
 rather than it happening by continuous collision with the other object, especially if the switch is covered a bit with some particle effects as a result of the collision.
-Ideally, if you pre-compute models you should try to ensure that there is enough variations so that the user feel that the different deformations are valid enough.
+Ideally, if you pre-compute models you should try to ensure that there is enough variations so that the user feel that the different deformations are varied enough.
+Hauser et al.\cite{hauser2003interactive} discusses modeling these deformations can be done through Modal Analysis.
+
+If pre-computations is not a viable option, real-time methods also exist.
+One such approach is the Finite Element Method\cite{muller_fem} which will yield quite realistic results, this method is quite sophisticated, and computationally and memory expensive\cite{rodrigues2005d4md}, however, hardware has evolved a lot since these claims were made, meaning that it might be more viable on modern hardware.
+Free Form Deformation is also a way to model deformation, while it is more fitting for interactive object modelling\cite{rodrigues2005d4md} it has been extended in different ways to allow for other types of deformation~\cite{coquillart_eefd}.
+
+Rodrigues et al.\cite{rodrigues2005d4md} proposes D4MD, a hybrid model of physically-based deformations (such as the finite element method) and geometrical methods (like the free form deformation) to use in vehicle simulation games.
+
+This article will focus on the spring mass model, another approach to implement mesh deformations~\cite{provot_mass_spring}. 
+
+\subsection{What is the Spring Mass Model?}
+The spring mass model is usually presented in a quite intuitive manner.
+Each vertex within a mesh is considered a particle with its own mass.
+Between the vertices are springs which try to hold the whole mesh together.
+When no forces are applied to the vertices within the model, the length of the springs are in their desired "resting" state.
+When forces are applied to the vertices and they start moving, the springs holding the vertices together will become stretched
+and will try to pull the particles back to return to their resting state\cite{catlike_mesh_deformation, mosegaards_clothing_simulation, provot_mass_spring}.
+
 
 
 \think{
@@ -29,15 +47,25 @@ Ideally, if you pre-compute models you should try to ensure that there is enough
     * In cases where the deformation happens so fast that the user don't really notice until it is finished
     * Places where you have predictable deformations, or the user don't notice the repeat of them.
     \cite{hauser2003interactive}
-}
 
 * Offline pre-computations (i.e. Create common deformations offline, and switch to those upon collision)
-    * Modal Analysis with Constraints \url{https://twvideo01.ubm-us.net/o1/vault/gdc04/slides/fast_yet_realistic.pdf} 
+    * Modal Analysis with Constraints \url{https://twvideo01.ubm-us.net/o1/vault/gdc04/slides/fast_yet_realistic.pdf}
 * Finite Element Method
     * Too resource demanding in 2002, might be better now
 * FDD (Free Form Deformation)
 * Mass Spring Systems
+}
 
-https://books.google.no/books?id=6XQbiLDWQhsC&pg=PA1&lpg=PA1&dq=Spring+mass+systems+video+games&source=bl&ots=LWPn1_Ul-v&sig=3S5QHrHD370o5Vcbb2nLeuSg70A&hl=en&sa=X&ved=2ahUKEwi4trbuzNPeAhVGXCwKHTzDCoQ4ChDoATADegQICRAB#v=onepage&q=Spring%20mass%20systems%20video%20games&f=false
+%https://books.google.no/books?id=6XQbiLDWQhsC&pg=PA1&lpg=PA1&dq=Spring+mass+systems+video+games&source=bl&ots=LWPn1_Ul-v&sig=3S5QHrHD370o5Vcbb2nLeuSg70A&hl=en&sa=X&ved=2ahUKEwi4trbuzNPeAhVGXCwKHTzDCoQ4ChDoATADegQICRAB#v=onepage&q=Spring%20mass%20systems%20video%20games&f=false
+
+\think{
+Notes:
+* In this area there is more specialized optimizided systems, the optimizations are becoming increasingly specific and complex, requiring years of experience in the area to truly appreciiate the changes.
+* Can paint with a big wide brush 
+* Don't go into alternative approaches/future, just acknowledge that they exists.
+* Keep reflection chapter and talk about the path to get here.
 
 
+* Potentially look at how GO and RUST treat threads.
+* Put Simon McCallum as Reference on CV for Massive CV.
+}
