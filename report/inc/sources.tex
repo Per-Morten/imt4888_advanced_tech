@@ -6,17 +6,20 @@ The assumption seems to be that if you are interested in implementing this,
 you already know enough math and physics to understand the papers.
 A lot of this stuff is explained through mathematical models which aren't necessarily the most intuitive,
 such as those found in Provot's paper\cite{provot_mass_spring} on calculating the internal force of tensions between springs.
-Now that I have implemented a mass-spring cloth model I understand more of what they are trying to say here,
+Now that I have implemented a mass spring cloth model I understand more of what they are trying to say here,
 but initially most of that stuff was just scary.
 Similarly a lot of important aspects simply were not mentioned in a lot of the different papers and tutorials,
-like how it is preferable that the timestep is in the integration methods are constant.
+like how it is preferable that the timestep in the integration methods is constant.
 This is probably obvious to a lot of the people working in this field, but to newcomers it might not be,
-and it is something I randomly figured out myself (only to later find it in a tutorial).
+and it is something I randomly figured out myself (only to later get it confirmed in a tutorial).
 
 It can also be very confusing to get into the field if you do not know exactly what you are looking for. 
 I did not know that modelling of objects for animations etc, also could be called deformation.
 Now it makes a lot of sense, but when I was initially looking for deformation stuff I was looking at it from a more visual effect
 viewpoint. This made it really hard to discern what papers on deformation were relevant and not.
+
+\todo{Do mention to be a bit careful with Unity Video Tutorials, and that it might be better to find written ones, as it is easier to tell fast if they are good or not (my opinion).
+Mention the terrible one I found on terrain deformation. Also while sometimes harder to understand the professional ones such as those on gamasutra, or those who are paper lights are usualy better and more representative. Finally, I would also suggest staying with those in C++, just because the threshold is higher, and they aren't relying on existing engines.}
 
 \section{Resources}
 Luckily some really good tutorials and resources exists for this stuff, however they can be a bit hard to find.
@@ -26,28 +29,28 @@ Below are some that helped me with the implementations, or that I found after co
 Jasper Flick's tutorials on Catlike Coding\footnote{\url{https://catlikecoding.com/unity/tutorials/}}
 are a really good starting point. His mesh deformation tutorial gives a good introduction to mass spring systems, and deals with the problems of scale and dampening.
 Additionally, I would advice anyone who is getting into mesh manipulation to go through his procedural meshes tutorial,
-It allows you to brush up on how meshes actually work, and get me into the mindset of mesh manipulation.
-Jasper Flick also has several other gread tutorials on manipulating meshes for visual effects, such as creating good looking waves\footnote{\url{https://catlikecoding.com/unity/tutorials/flow/waves/}}, which is what I would look at next if time would have allowed it.
+it allows you to brush up on how meshes actually work, and got me into the mindset of mesh manipulation.
+Jasper Flick also has several other great tutorials on manipulating meshes for visual effects, such as creating good looking waves\footnote{\url{https://catlikecoding.com/unity/tutorials/flow/waves/}}, which is something I will give a shot when I get the time.
 
 \paragraph{Jeff Lander} 
 Jeff Lander's article was also a good "tutorial", however I struggled when trying to adapt the code from his article\cite{jeff_lander_real_time_cloth} into Unity,
 I ended up with a model that exploded really quickly, which I believe might be due to the semi-implicit Euler integration and that I was not using fixed time steps,
-as I did not know of it at the time. I would like to go back to that implementation in the future to give it a spin. 
+as I did not know of it at the time. I would like to go back to that implementation in the future to give it another spin. 
 Unfortunately the links to his code on gamasutra are dead, however, the code is available online\footnote{\url{http://www.darwin3d.com/gamedev.htm}}.
 
 \paragraph{Jesper Mosegaard}
-Jesper Mosegaards tutorial\cite{mosegaards_clothing_simulation} was the one that helped me the most in understanding how cloth simulation through spring mass systems worked.
+Jesper Mosegaards tutorial\cite{mosegaards_clothing_simulation} was the one that helped me the most in understanding how cloth simulation through mass spring systems worked.
 He highlights the importance of the Verlet integration and also explains it in a quite intuitive manner, additionally his code
 is relatively easy to follow, however, I wish he mentioned in his article that the timestep had to be a constant, because that was something I figured out
-after having followed his implementation but got inconsistent results.
+after I followed his implementation but got inconsistent results.
 
 \paragraph{Thomas Jakobsen}
 Reading Thomas Jakobsen's\cite{jakobsen_advanced_character_physics} article is also recommended, as it goes deeper into Verlet integration and handling constraints,
-and other places where spring mass systems can be used. However, this one gets a bit more advanced after a while.
+and other places where mass spring systems can be used. However, this one gets a bit more advanced.
 
 \paragraph{Henrik Enqvist}
 The article by Henrik Enqvist\cite{alan_wake_mass_spring} on cloth in Alan Wake is something I came upon just recently, but I wish I had found it sooner.
-It gives a good overview of spring mass systems and Verlet integration, and the one who confirmed to me that fixed timestep was actually needed.
+It gives a good overview of mass spring systems and Verlet integration, and the one who confirmed to me that fixed timestep was actually needed.
 It also comes up with solutions to some of the problems I have in my own model, such as too much stretching and rubbery feel.
 
 \paragraph{Math as Code}
