@@ -18,7 +18,7 @@ rendering takes a long time, as it would allow them to iterate on their ideas be
 
 Moving back to the video game world Jakobsen~\cite{jakobsen_advanced_character_physics} proposes using a spring mass system
 for modelling "skeletons" of in-game characters. 
-He describes how the corpses within the game Hitman: Codename 47 consists of just particles and springs, as seen in figure~\ref{fig:spring_mass_skeleton}.
+He describes how the corpses within the game Hitman: Codename 47 consists of just particles and springs.
 These springs have varying degrees of stiffness to ensure that the body does not bend or rotate in unnatural ways.
 For example, a very stiff spring between the legs can ensure that legs never cross over.
 Additionally, Jakobsen uses angular springs to ensure that the body does not move in ways that the human body would not allow.
@@ -26,22 +26,3 @@ This approach allows for intuitive physical responses as well, an example given 
 reacting to that hit can be done simply by moving the shoulder particle based on the force from the hit.
 Moving the particle will impact the other springs attached to it, which will drag the shoulder and its connected particles closer to each other,
 leading to realistic looking physical behavior.
-
-\begin{figure}
-    \centering
-    %\includegraphics{}
-    \caption{Particle/Stick figure used to represent human anatomy (Re-drawn based on Jakobsen's drawing\cite{jakobsen_advanced_character_physics})}
-    \label{fig:spring_mass_skeleton}
-\end{figure}
-
-\todo{Essentially you can use spring mass systems every time you need to model some behavior where:
-    Application is interactive, so you cannot accept frame drops,
-    %the 
-}
-
-\todo{Add here the note that Muller brings up, that it can be good for artists in an animated movie to be able to see their resultsin real time, before it is sent off to hour long renderings}
-
-
-\todo{In Real Time Muscle Deformations Using Mass-Spring Systems, they mention biomechanical model for muscle simulation, but it is too expensive.}
-
-

@@ -2,7 +2,7 @@
 \section{Description}
 Video Games are becoming more and more complicated with each new release, supporting different visual effects and physical simulations
 to enhance the player's immersion, among these effects are deformation. 
-Mesh deformation can happen in a lot of different cases, for example when cars crash into each other in a car game they might end up with a deformed model due to the collision. \todo{Add picture}
+Mesh deformation can happen in a lot of different cases, for example when cars crash into each other in a car game they might end up with a deformed model due to the collision. 
 Other examples are materials that are deformed upon interaction, like how the snow deforms in God of War\footnote{God of War Snow Deformation Video: \url{https://www.youtube.com/watch?v=BEgY9k89s3o}}, flags that are waving in the wind, or plants moving as characters collide with them, only to bounce back upon leaving the collision.
 
 Realistic mesh deformations has long existed in mediums such as animated films.
@@ -38,33 +38,3 @@ Between the vertices are springs which try to hold the whole mesh together.
 When no forces are applied to the vertices within the model, the length of the springs are in their desired "resting" state.
 When forces are applied to the vertices and they start moving, the springs holding the vertices together will become stretched
 and will try to pull the particles back to return to their resting state\cite{catlike_mesh_deformation, mosegaards_clothing_simulation, provot_mass_spring}.
-
-
-
-\think{
-* Where can this approach work well?
-    * In cases where the deformation happens so fast that the user don't really notice until it is finished
-    * Places where you have predictable deformations, or the user don't notice the repeat of them.
-    \cite{hauser2003interactive}
-
-* Offline pre-computations (i.e. Create common deformations offline, and switch to those upon collision)
-    * Modal Analysis with Constraints \url{https://twvideo01.ubm-us.net/o1/vault/gdc04/slides/fast_yet_realistic.pdf}
-* Finite Element Method
-    * Too resource demanding in 2002, might be better now
-* FDD (Free Form Deformation)
-* Mass Spring Systems
-}
-
-%https://books.google.no/books?id=6XQbiLDWQhsC&pg=PA1&lpg=PA1&dq=Spring+mass+systems+video+games&source=bl&ots=LWPn1_Ul-v&sig=3S5QHrHD370o5Vcbb2nLeuSg70A&hl=en&sa=X&ved=2ahUKEwi4trbuzNPeAhVGXCwKHTzDCoQ4ChDoATADegQICRAB#v=onepage&q=Spring%20mass%20systems%20video%20games&f=false
-
-\think{
-Notes:
-* In this area there is more specialized optimizided systems, the optimizations are becoming increasingly specific and complex, requiring years of experience in the area to truly appreciiate the changes.
-* Can paint with a big wide brush 
-* Don't go into alternative approaches/future, just acknowledge that they exists.
-* Keep reflection chapter and talk about the path to get here.
-
-
-* Potentially look at how GO and RUST treat threads.
-* Put Simon McCallum as Reference on CV for Massive CV.
-}

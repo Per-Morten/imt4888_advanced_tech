@@ -11,23 +11,6 @@ The two used in the following implementations will be semi-implicit Euler integr
 Lastly we need to decide if we go for a kinematic system where we model springs as constraints, 
 or a dynamic system where we model the springs as proper springs working with Hooke's law\cite{math_for_games}, both of which are presented within this chapter.
 
-\todo{Talk about how the deformation is done without mentioning springs first. I.e. you apply force to it.}
-\todo{Also mention the importance of damping.}
-\todo{Motivate that you choose both your "physics model" and your integration scheme}
-
-\think{Firstly one must decide upon the model to use for the mesh deformation itself, i.e. are we algorithmically solving these problems using proper physics, or do we more brute force it through particle simulation. The algorithmic approach using proper physics will usually yield more realistic results, however, they are usually more complicated to implement,
-and might not meet the performance requirements of games. The more brute force approaches such as spring-mass spring systems are usually easier to implement,
-and gives good enough results.}
-
-
-%
-%\begin{figure}
-    %\includegraphics{report/figures/md_fisher_cloth.png}
-    %\caption{Caption}
-    %\label{fig:my_label}
-%\end{figure}
-%\todo{Find smaller image}
-
 \subsection{What is Semi-Implicit Euler Integration?}
 Semi-Implicit Euler integration is perhaps the integration scheme that is easiest to follow, and comes most natural to programmers when they implement
 movement in a realtime system for the first time. It is also a scheme used within a lot of physics engines~\cite{gafferongames_integration}.
@@ -98,17 +81,14 @@ While both of these approaches imply different terminology for the connections/s
 Once all the decisions of deformation model, integration scheme and kinematic/dynamic approach has been made it is possible to start implementation of mesh deformation.
 
 \subsection{Dynamic Approach - Ball Deformation}
-\todo{Add video}
-Jasper Flick\cite{catlike_mesh_deformation} shows an implementation where the springs are implied based on the original position of each vertex and their new position.
+Jasper Flick\cite{catlike_mesh_deformation} shows an implementation\footnote{Video of this implementation in action: \url{https://www.youtube.com/watch?v=f-5RzfN8kjw}} where the springs are implied based on the original position of each vertex and their new position.
 The implementation takes a dynamic approach to deformation and follows a semi-implicit Euler integration scheme.
 In this implementation we keep a copy of the initial vertex positions, as well as a collection of the modified vertices.
 Additionally, we keep a collection of the velocity of each vertex, which we update each time force is added to a vertex.
 The springs come into play when updating the positions of all the vertices based on their velocities.
-Each spring within this system is the vector between the initial positions of the vertices in the mesh and their current positions, as seen in figure \ref{fig:catlike_mesh_deformation_springs}.
+Each spring within this system is the vector between the initial positions of the vertices in the mesh and their current positions, as seen in Figure~\ref{fig:catlike_mesh_deformation_springs}.
 Upon update of the vertices the force of a spring is applied to the velocity of a vertex in the direction of the spring, moving the vertex back towards its initial position.
-The code for this can be seen in listing~\ref{code:catlike_mesh_deformation_update}.
-
-\todo{Write about how force is added}
+The code for this can be seen in Listing~\ref{code:catlike_mesh_deformation_update}.
 
 \begin{figure}
 \centering
@@ -137,8 +117,8 @@ private void UpdateVertex(int i)
 \subsubsection{Usage}
 As seen in the video, although simple, the implementation provides quite a lot of flexibility, toying with the different variables
 can lead to some interesting visual effects.
-For example, applying negative force to the sphere can be used to create a visual effect similar to that of a star being swallowed by a black hole.
-Applying outward force from the inside of the model can create a relatively convincing effect of something moving around inside the object.
+For example, applying negative force to the sphere can be used to create a visual effect similar to that of a star being swallowed by a black hole\footnote{See: \url{https://youtu.be/f-5RzfN8kjw?t=62}}.
+Applying outward force from the inside of the model can create a relatively convincing effect of something moving around inside the object\footnote{See: \url{https://youtu.be/f-5RzfN8kjw?t=28}}.
 Giving the sphere a high SpringForce will lead to it being harder to deform, and more bouncy when trying to return to its original shape.
 
 \subsubsection{Limitations}
@@ -149,16 +129,10 @@ This means that if we were to for instance pin two of the vertices to their init
 none of the other vertices would respect that two of them were locked in place, leading to less than satisfying results.
 
 \subsection{Kinematic Approach - Cloth Simulation}
-Cloth simulation is a place where the springs are more apparent than the previous implementation. \todo{Add video}
+Cloth simulation is a place where the springs are more apparent than the previous implementation\footnote{Video of cloth simulation: \url{https://www.youtube.com/watch?v=SY9PPEl8Kmo}}. 
 The implementation is based on that of Jesper Mosegaard\cite{mosegaards_clothing_simulation} and Thomas Jakobsen\cite{jakobsen_advanced_character_physics}.
 Unlike the previous implementation, the springs here are explicit and ensure that vertices are not handled in isolation but rather are affected by the other vertices in the system.
 This gives greater control in that it allows you to apply force to a specific vertex and the whole system responds, rather than having to apply the force to all the vertices.
-
-\begin{figure}
-%\centering
-%    \caption{\todo{Insert figure}}
-    \label{fig:my_cloth_implementation_springs}
-\end{figure}
 
 \subsubsection{Spring Types}
 There are three types of springs within this implementation, all serving the same purpose of holding the model together,
@@ -215,8 +189,6 @@ While not as obvious, this can be seen in figure~\ref{fig:bending_springs_collap
     \label{fig:bending_springs_collapsing}
 \end{figure}
 
-\todo{Mention that all the springs have the same force, that might be something we want to change}
-
 % This might be what is creating wrinkles?
 % Double check that this is actually the case.
 % Without
@@ -235,7 +207,6 @@ Upon update we iterate through all the vertices and calculate their new position
 Following the update is fixing the constraints. This is done by iterating through all the springs and correcting the distance between the vertices it is connected to.
 This needs to be done several times as to avoid the model seeming to elastic.
 The code for this can be seen in listing~\ref{code:satisfy_constraints}.
-
 
 \begin{figure}
 \begin{lstlisting}[label={code:satisfy_constraints},language=csharp,caption={Semi-Implicit Euler Integration}]
@@ -275,7 +246,7 @@ Additionally, you would have to ensure that all the cuts were in line with the t
 Although there are many advantages of this model, like how it is relatively easy to implement, gives quite good results and cannot "explode", it does suffer from a few issues.
 A problem with this implementation is that it can get into unsolvable states.
 I.e. when you apply forces to model continuously it can get into a situation where it never rests.
-Such a situation can be seen in the following video \todo{Add video, and change sentence to: Such a situation can be seen at (point) in the video}.
+Such a situation can be seen in the video of the implementation after aroundt 25 seconds\footnote{See: \url{https://youtu.be/SY9PPEl8Kmo?t=25}}.
 Here the forces of gravity are continuously being applied to the vertices, in the real world the bottom
 of this cloth would stop moving after a while. However, in this implementation the cloth never stops moving
 because the springs never manage to get into a situation where they all are "satisfied".
@@ -295,11 +266,3 @@ Another extension could be self collision or collision with other soft bodies, h
 and quickly ends up being really expensive in terms of performance as well.
 Moving these calculations to the GPU is also a possibility, as a lot of the calculations are data parallel and would probably benefit quite a lot for being executed in a parallel environment.
 This implementation does not make any distinction between the different types of springs, extending the implementation to react differently based on the different spring types could lead to more realistic behavior.
-
-\todo{Bring up how an extension is to do this on a gpu}
-
-\todo{Should I also look into the Catlike Coding water deformation thingy, as it is another way of doing mesh deformation}
-
-
-\todo{The technology ahead, ask if this could be used with tesselation and be done on the GPU?}
-\todo{Discuss how mass spring damper model also used for other stuff, such as water simulation. Look at Just Cause water implementation article on gamasutra}

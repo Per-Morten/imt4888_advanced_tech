@@ -1,9 +1,9 @@
 \chapter{Reflection}
 Working on this project has been an enlightening experience, but it has not been without issues.
 Originally I wanted to look at shaders in Unity to brush up on my shader knowledge, with the final goal being to end up in the area of terrain deformation.
-I spent the beginning of the project toying with Unity's shadergraph\footnote{\url{https://blogs.unity3d.com/2018/02/27/introduction-to-shader-graph-build-your-shaders-with-a-visual-editor/}}, creating different visual effects\footnote{\todo{Add video of the simple shielding effect}} to verify that my assumptions of how shaders actually worked were correct. 
+I spent the beginning of the project toying with Unity's shader graph\footnote{\url{https://blogs.unity3d.com/2018/02/27/introduction-to-shader-graph-build-your-shaders-with-a-visual-editor/}}, creating different visual effects\footnote{Video of some of two of the visual effects in shader graph: \url{https://youtu.be/1DBmfpjmMds}} to verify that my assumptions of how shaders actually worked were correct. 
 
-After getting my feet wet in shadergraph I moved over to writing the shaders by hand, while looking for tutorials on terrain deformation.
+After getting my feet wet in shader graph I moved over to writing the shaders by hand, while looking for tutorials on terrain deformation.
 It was hard to find good tutorials on this, especially on the GPU. However, I did stumble across a seemingly good tutorial from Jasper Flick\footnote{\url{https://catlikecoding.com/unity/tutorials/advanced-rendering/surface-displacement/}} 
 on surface displacement which seemed quite close to what I wanted to do.
 This tutorial assumed that you were already quite familiar with rendering concepts, and built on his previous tutorials, so I started going through those.
@@ -38,30 +38,4 @@ which meant that looking around for more background papers and tutorials was qui
 
 However, while the path I took throughout this project was full of twists and turns I do believe I have come out of it with a greater and wider understanding of
 shaders \& rendering, mesh manipulation, and physically based deformation.
-
-
-
-% * Wanted to look at terrain deformation like that seen in god of war, though it would all be done in shaders
-% * Generalized this Unity shaders (as I wanted to get back into shaders coding, toyed with shadergraph and shaders for a bit, doing tutorials)
-%     * Worked towards Surface displacement in catlike coding
-%     * Unity Shaders was way to different than the OpenGL shaders I was used to
-%         * Tried moving over to Unreal, but apparently had to compile from source to get proper shader support
-%             * Compilation times would kill my iteration times.
-%             * Writing my own implementation would take too much time.
-%     * Move over to mesh deformation on the CPU first
-%         * The convert to the GPU
-%         * Doing stuff on the GPU is a bit harder, but after having implemented it on the CPU, implementing it on the GPU is more of a chore
-%             * Figuring out data layout etc, I have already done that a lot before, so re-implementing stuff on the GPU will probably be more of a chore with poor debugging tools,
-%                 rather than a task I really learn something new from.
-%     * Move over to only doing it on the CPU, still with target to do terrain deformation
-% * Worked towards the mesh deformation shown on catlike coding
-%     * Didn't really find any good tutorials on terrain deformation in specific.
-%     * After implementing it, learned that it was called spring mass systems
-%     * Got more interested in the system and deformations in general, saw that the system could be used for cloth simulation.
-%     * Moved over to doing cloth physics.
-% * The road to the end has been full of twists and turns, however, I believe I have come out of it with a greater and wider understanding of both shaders, and mesh manipulation,
-% although the shaders are not really reflected in the end product.
-    
-    
-
-
+The code from the early projects are located in the "projects\_for\_reflection" folder on the GitHub\footnote{\url{https://github.com/Per-Morten/imt4888_advanced_tech}} repository.
