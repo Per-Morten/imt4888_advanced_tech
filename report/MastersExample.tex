@@ -1,7 +1,7 @@
 %% This document gives an example on how to use the ntnumasterthesis
 %% LaTeX document class.
 
-%% Use short name MACS, MIS, CIMET, MTDMT, MIXD or MIS  
+%% Use short name MACS, MIS, CIMET, MTDMT, MIXD or MIS
 %% Language english or norsk
 %% b5paper with oneside or twoside, you can set A4 if you want but you submit in b5
 
@@ -17,12 +17,12 @@
 \usepackage{graphicx}
 \usepackage{hyperref}   % For cross references in pdf
 
-% For smart references 
+% For smart references
 %    use \cref{label} and Caption and Number will be added automatically
-\usepackage[capitalise,noabbrev]{cleveref} 
+\usepackage[capitalise,noabbrev]{cleveref}
 
-\usepackage[dvipsnames]{xcolor}              % For colouring text 
-\hypersetup{colorlinks=true,     
+\usepackage[dvipsnames]{xcolor}              % For colouring text
+\hypersetup{colorlinks=true,
 		linkcolor=blue,          % color of internal links (change box color with linkbordercolor)
     citecolor=blue,        % color of links to bibliography
     filecolor=blue,      % color of file links
@@ -33,6 +33,7 @@
 \usepackage{booktabs}
 \usepackage{gnuplottex} %miktex option if using miktex on windows
 \usepackage{rotating}
+\usepackage{float}
 
 
 \definecolor{darkgreen}{rgb}{0,0.5,0}
@@ -44,7 +45,10 @@
                 commentstyle=\color{darkgreen}\ttfamily,
 }
 
-\include{inc/latex_util}
+
+
+\include{report/inc/latex_util}
+%\include{inc/latex_util.tex}
 
 %Typesetting of C++ but not always stable in titles etc...
 \newcommand{\CPP}[0]{{C\nolinebreak[4]\hspace{-.1em}\raisebox{.1ex}{\small\bf +\hspace{-.1em}+\ }}}
@@ -61,12 +65,12 @@
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
 \newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
-%\renewcommand{\todo}[1]{}
+\renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
-%\renewcommand{\rephrase}[1]{}
-\newcommand{\think}[1]{{\color{Orchid} #1\\}}
-%\renewcommand{\think}[1]{}
+%\renewcommand{\rephrase}[1]{#1}
+\newcommand{\think}[1]{{\color{Orchid} #1 }}
+\renewcommand{\think}[1]{}
 
 
 \newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
@@ -115,22 +119,56 @@
 %\listoffigures
 %\listoftables
 %\lstlistoflistings
-\think
-{
-    Topics to cover:
+
+\section{Color legend}
+\todo{TODO Comments}
+\rephrase{Should be rephrased}
+\think{General thoughts}
+
+\think{
+    Possible topics to cover:
     \begin{itemize}
+        \item Human muscles can be modelled as spring system, brain sets desired spring length.
+        \item Hybrid systems (Raw spring mass in just cause, but it is further fixed with algorithms)
+        \item Give an overview of the prep (Do in reflection)
         \item Cover mesh deformation as springs
         \item Cover mesh manipulation as physical objects with constraints (cloth)
-        \item Comment on both kinetic and dynamic
-        \item Cover Doing it on the CPU, doing it on the GPU (in Shaders)
+        \item Bring up papers that I was pointed at which was hard to understand.
+        \item Comment on both kinetic and dynamic (don't need cover)
+        \item Cover Doing it on the CPU, doing it on the GPU (in Shaders) (don't need to cover)
     \end{itemize}
 }
 
-\think{ Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
+\todo{
+Change title.
+}
 
-\include{inc/introduction} % includes latex files from the same directory
-\include{report/inc/problem_description} % could be called Methodology or methods or any filename 
-\include{report/inc/implementation}
+\think{Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
+\think{Should I focus more on the usage of mass spring models, and discuss what they can be used for, i.e. not just going for mesh manipulation, but also other types of physical simulations?}
+
+\todo{Add link to repo! Invite Simon to the Repo}
+
+\todo{
+    Mass spring competes with physics approaches
+}
+
+Structure:
+Introduction
+Problem Description
+Simple Mesh Manipulation like Rounding a cube (Done both on CPU and GPU) % Don't do this?
+Spring Mass Systems
+What can Spring Mass Be Used For?
+Sources
+* Include not just sources and good tutorials, but perhaps also that it can be wise to read up on mesh generation.
+Reflection
+
+\include{report/inc/introduction} % includes latex files from the same directory
+\include{report/inc/problem_description} % could be called Methodology or methods or any filename
+\include{report/inc/mass_spring_impl}
+\include{report/inc/usage}
+\include{report/inc/future}
+\include{report/inc/sources}
+\include{report/inc/reflection}
 %\include{inc/structure} % could be results
 %\include{inc/implementation}
 %\include{inc/discussion}

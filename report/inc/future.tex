@@ -1,0 +1,29 @@
+\chapter{Future}
+Predicting the future is always a difficult challenge, especially in fields such as technology and graphics.
+However, I would say that it seems like we have settled down on some of the classic conceptual techniques such as spring mass systems, finite element methods and meshless deformations~\cite{muller2005meshless}, at least for interactive applications such as video games. 
+
+I base this on how the mass spring model, although quite old, is still brought in many of the slides I have seen on cloth simulation from different universities such as Trinity College in Dublin\cite{mass_spring_cloth_trinity},
+and its continuous use in the games industry.
+For example the clothing in Alan Wake\footnote{\url{http://www.alanwake.com/}} was done through a mass spring model\cite{alan_wake_mass_spring}, and from my impression this is also the case
+in Assassin's Creed Unity\footnote{\url{https://www.ubisoft.com/en-us/game/assassins-creed-unity/}} and Far Cry 4\footnote{\url{https://www.ubisoft.com/en-us/game/far-cry-4/}}\cite{ubisoft_cloth_simulation}.
+This might change in the future though as other models are proposed. Weidner et al.~\cite{weidner_eol} proposes a way to deal with the situation where a piece of cloth collides with a straight edges that are not exactly on the vertices leading to sub-realistic results. 
+However, it is not entirely clear to me how this implementation actually works and whether or not it is for real-time applications such as games, or would require too much processing power. 
+If that is the case, maybe it will be possible in the future.
+
+While other methods do exist I do not think we will move away from spring mass systems very soon, their relative easy of implementation, believably,
+and relatively good performance still make them attractive.
+It is important to remember that it is not always about having the newest shiniest tool, but rather using that tool that best fit the situation at hand.
+
+
+\todo{Bring up that the methods today might be enough, i.e. we don't really need more, it's not the same ompf factor, and today is satisfying}
+
+\think{Conclussion:
+Spring mass systems even in their most basic forms will still probably stick around,
+as it is a reasonably simple and not to taxing approach that gives plausible results.
+}
+
+%\todo{Hybrid Systems?, (D4MD – Deformation system for a vehicle simulation game) }
+%* Eulerian-on-langrangian cloth simulation: \url{https://drive.google.com/file/d/1l3zUKHi1TVbmF_SweB6FB3xCa5XBQ6mF/view}
+%* Nonsmooth Developable Geometry for Interactively Animating Paper Crumpling: \url{https://dl.acm.org/citation.cfm?doid=2870647.2829948}
+
+% http://www.gamasutra.com/view/feature/132771/the_secrets_of_cloth_simulation_in_.php?page=4

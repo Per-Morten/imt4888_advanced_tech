@@ -8,6 +8,7 @@ https://creativecoding.soe.ucsc.edu/courses/cs488/finalprojects/cloth/cloth.pdf
 http://www.cs.cmu.edu/afs/cs/academic/class/15462-s13/www/lec_slides/Jakobsen.pdf
 https://gafferongames.com/post/integration_basics/
 https://www.gamasutra.com/view/feature/131851/devil_in_the_blue_faceted_dress_.php?page=2
+https://graphics.stanford.edu/~mdfisher/cloth.html
 https://cs.uwaterloo.ca/~c2batty/courses/CS888_2014/Lecture1.pdf
 https://en.wikipedia.org/wiki/Soft-body_dynamics
 
