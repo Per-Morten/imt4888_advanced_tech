@@ -167,44 +167,17 @@ public class MassSpringCloth2
 
 
 
-
-        var steps = Columns / 5;
-        for (int i = mPositions.Length - 1; i >= mPositions.Length - steps; i--)
-        {
-            mPositions[i] = mOriginalPositions[i];
-            //mPositions[i - steps * 2] = mOriginalPositions[i - steps * 2];
-            mPositions[i - steps * 4] = mOriginalPositions[i - steps * 4];
-        }
-
-        //mPositions[(Rows / 2) * Columns + (Columns / 2)] = mOriginalPositions[(Rows / 2) * Columns + (Columns / 2)];
-
+        // Fix two corners.
         //var steps = Columns / 5;
-        //for (int i = 0; i < steps; i++)
+        //for (int i = mPositions.Length - 1; i >= mPositions.Length - steps; i--)
         //{
         //    mPositions[i] = mOriginalPositions[i];
-        //    mPositions[i + steps * 2] = mOriginalPositions[i + steps * 2];
-        //    mPositions[i + steps * 4] = mOriginalPositions[i + steps * 4];
+        //    //mPositions[i - steps * 2] = mOriginalPositions[i - steps * 2];
+        //    mPositions[i - steps * 4] = mOriginalPositions[i - steps * 4];
         //}
 
-        // Lock top corners.
-        // Top Left
-        //mVertices[0 * Columns + 0] = mInitialVertices[0 * Columns + 0];
-        //mVertices[0 * Columns + Columns - 1] = mInitialVertices[0 * Columns + Columns - 1];
-
-        //mVertices[0 * Columns + (Columns / 4)] = mInitialVertices[0 * Columns + (Columns / 4)];
-
-
-        //// Top Middle
-        //mVertices[0 * Columns + (Columns / 2)] = mInitialVertices[0 * Columns + (Columns / 2)];
-
-        //mVertices[0 * Columns + ((Columns / 4) * 3)] = mInitialVertices[0 * Columns + ((Columns / 4) * 3)];
-
-        //// Top Right
-
-        // Top Left
-        //mVertices[Rows * Columns - 1] = mInitialVertices[Rows * Columns - 1];
-        // Top Right
-        //mVertices[Rows * Columns - Columns] = mInitialVertices[Rows * Columns - Columns];
+        // Fix middle point
+        mPositions[(Rows / 2) * Columns + (Columns / 2)] = mOriginalPositions[(Rows / 2) * Columns + (Columns / 2)];
 
         mMesh.vertices = mPositions;
         mMesh.RecalculateNormals();
@@ -232,58 +205,32 @@ public class MassSpringCloth2
         if (mPositions == null)
             return;
 
-        //// Draw Vertices
-        //Gizmos.color = Color.black;
-        //for (int i = 0; i < mPositions.Length; i++)
-        //{
-        //    var vertexWorld = transform.TransformPoint(mPositions[i]);
-        //    Gizmos.color = Color.black;
-        //    Gizmos.DrawSphere(vertexWorld, 0.01f);
-        //    //Gizmos.color = Color.yellow;
-        //    //Handles.Label(vertexWorld, $"{i}");
-        //}
+        // Draw Vertices
+        Gizmos.color = Color.black;
+        for (int i = 0; i < mPositions.Length; i++)
+        {
+            var vertexWorld = transform.TransformPoint(mPositions[i]);
+            Gizmos.color = Color.black;
+            Gizmos.DrawSphere(vertexWorld, 0.01f);
+            //Gizmos.color = Color.yellow;
+            //Handles.Label(vertexWorld, $"{i}");
+        }
 
-        //// Draw all the springs
-        //Gizmos.color = Color.white;
+        // Draw all the springs
+        Gizmos.color = Color.white;
 
-        //for (int i = 0; i < mSprings.Count; i++)
-        //{
-        //    var spring = mSprings[i];
-        //    Gizmos.color = spring.Color;
-        //    var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
-        //    var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
-        //    //if (spring.Color == Color.blue)
-        //    //{
-        //        Gizmos.DrawLine(v1World, v2World);
-        //    //}
-        //}
+        for (int i = 0; i < mSprings.Count; i++)
+        {
+            var spring = mSprings[i];
+            Gizmos.color = spring.Color;
+            var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
+            var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
+            //if (spring.Color == Color.blue)
+            //{
+            Gizmos.DrawLine(v1World, v2World);
+            //}
+        }
 
-        // Essentially just drawing the mesh here with gizmos, just so I don't have to deal with the mesh itself.
-        //for (int row = 0; row < Rows; row++)
-        //{
-        //    for (int col = 0; col < Columns; col++)
-        //    {
-        //        var v = transform.TransformPoint(mPositions[row * Columns + col]);
-        //        // Structural Bindings
-        //        // Top
-        //        //if (row > 0)
-        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col]));
-        //        //// Left
-        //        //if (col > 0)
-        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[row * Columns + col - 1]));
-
-
-        //        // Top Left
-        //        //if (row > 0 && col > 0)
-        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col - 1]));
-
-
-        //        // Top Right
-        //        //if (row > 0 && col < Columns - 1)
-        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col + 1]));
-
-        //    }
-        //}
 
 
     }
