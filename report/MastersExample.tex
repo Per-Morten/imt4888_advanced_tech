@@ -65,12 +65,12 @@
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
 \newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
-%\renewcommand{\todo}[1]{}
+\renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
-%\renewcommand{\rephrase}[1]{#1}
+\renewcommand{\rephrase}[1]{#1}
 \newcommand{\think}[1]{{\color{Orchid} #1 }}
-%\renewcommand{\think}[1]{}
+\renewcommand{\think}[1]{}
 
 
 \newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
@@ -119,7 +119,6 @@
 %\listoftables
 %\lstlistoflistings
 
-\todo{Add link to repo! Invite Simon to the Repo}
 
 \include{report/inc/introduction} % includes latex files from the same directory
 \include{report/inc/problem_description} % could be called Methodology or methods or any filename
