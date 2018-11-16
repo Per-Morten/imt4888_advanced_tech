@@ -647,7 +647,7 @@ Use $\backslash$setthesisyear\{<year>\} to set year.
 
 
 	\renewcommand\nmt@firstpagetext{%
-	   IMT4888 - Advanced Game Technology\\
+	   IMT4888 - Specialization in Game Technology\\
 		 \nmt@DegreeNameText\\
 	   7.5 ECTS\\
 	   \nmt@DepartmentNameText\\

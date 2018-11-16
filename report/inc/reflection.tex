@@ -1,1 +1,42 @@
 \chapter{Reflection}
+Working on this project has been an enlightening experience, but it has not been without issues.
+Originally I wanted to look at shaders in Unity to brush up on my shader knowledge, with the final goal being to end up in the area of terrain deformation.
+I spent the beginning of the project toying with Unity's shader graph\footnote{\url{https://blogs.unity3d.com/2018/02/27/introduction-to-shader-graph-build-your-shaders-with-a-visual-editor/}}, creating different visual effects\footnote{Video of some of two of the visual effects in shader graph: \url{https://youtu.be/1DBmfpjmMds}} to verify that my assumptions of how shaders actually worked were correct. 
+
+After getting my feet wet in shader graph I moved over to writing the shaders by hand while looking for tutorials on terrain deformation.
+It was hard to find good tutorials on this, especially on the GPU. However, I did stumble across a seemingly good tutorial from Jasper Flick\footnote{\url{https://catlikecoding.com/unity/tutorials/advanced-rendering/surface-displacement/}} 
+on surface displacement which seemed quite close to what I wanted to do.
+This tutorial assumed that you were already quite familiar with rendering concepts and built on his previous tutorials, so I started going through those.
+While working through these tutorials I felt that Unity's shaders were too different from those I had written before in OpenGL, the learning curve
+was a bit too steep, debugging tools were quite lacking, and that I was not making good progress towards the end goal.
+
+I looked around for alternative solutions. Writing shaders in Unreal was a possibility, but that requires building the entire engine from source
+when you add your own shading models\cite{unreal_shaders}, and the compilation times would quickly hurt my iteration process.
+Another alternative was to implement my own rendering program in C++, but that would have taken too much time.
+
+Due to this I decided to move back to the CPU, and work on more general mesh deformation there.
+The original intention was to port the logic over to vertex shaders after I had implemented them on the CPU.
+I soon moved away from that idea. Implementing stuff on the GPU probably would be more of a chore than a learning experience,
+as I already have dealt with data layout and CPU-GPU communication in other courses.
+The challenge would be the logic of mesh deformation, not how to do it in shaders.
+
+With the shift over to the CPU, I started to work on procedural mesh generation, as all the different tutorials I looked at
+on mesh deformation was working on procedurally generated meshes. Working through the procedural mesh generation tutorials
+of Jasper Flick was quite intuitive and gave results, and in the end, I finished his mesh deformation tutorial.
+I played around with the implementation for a while, without a clear goal of where to next.
+
+Looking through papers on the topic of mesh deformation most of it seemed to focus on deformation for manipulating meshes more related to creating animations,
+which was not really what I was after. 
+It was first when I learned that the mesh deformation that Jasper Flick\cite{catlike_mesh_deformation} presented was a sort of mass-spring system
+that I figured out that deformation through mass-spring systems would be what I wanted to focus on, and its use in cloth simulation was quite enticing.
+Unfortunately, this was quite late in the course, so I did not get to spend as much time on the background of the technology, alternatives
+and the future of the technology as I originally wanted.
+I would have loved to get more into the other approaches like the finite element methods or free form deformations or try the mass-spring system
+within other contexts or with other integrators, moving more into the area of physics simulations.
+Figuring out the topic so late also meant that I ran into the problem that you do not really know what to search for until you have been in an area for a while,
+which meant that looking around for more background papers and tutorials was quite difficult.
+
+However, while the path I took throughout this project was full of twists and turns I do believe I have come out of it with a greater and wider understanding of
+shaders \& rendering, mesh manipulation, and physically based deformation.
+
+The code from the early projects are located in the "projects\_for\_reflection" folder on the GitHub\footnote{\url{https://github.com/Per-Morten/imt4888_advanced_tech}} repository.

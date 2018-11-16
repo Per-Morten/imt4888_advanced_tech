@@ -68,7 +68,7 @@
 \renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
-%\renewcommand{\rephrase}[1]{#1}
+\renewcommand{\rephrase}[1]{#1}
 \newcommand{\think}[1]{{\color{Orchid} #1 }}
 \renewcommand{\think}[1]{}
 
@@ -85,7 +85,6 @@
 %\renewcommand{\n}[1]{} %remove starting % to remove notes
 
 \newcommand{\dn}[1]{} % add the d to a note to say that you have finished with it.
-
 
 
 
@@ -120,47 +119,6 @@
 %\listoftables
 %\lstlistoflistings
 
-\section{Color legend}
-\todo{TODO Comments}
-\rephrase{Should be rephrased}
-\think{General thoughts}
-
-\think{
-    Possible topics to cover:
-    \begin{itemize}
-        \item Human muscles can be modelled as spring system, brain sets desired spring length.
-        \item Hybrid systems (Raw spring mass in just cause, but it is further fixed with algorithms)
-        \item Give an overview of the prep (Do in reflection)
-        \item Cover mesh deformation as springs
-        \item Cover mesh manipulation as physical objects with constraints (cloth)
-        \item Bring up papers that I was pointed at which was hard to understand.
-        \item Comment on both kinetic and dynamic (don't need cover)
-        \item Cover Doing it on the CPU, doing it on the GPU (in Shaders) (don't need to cover)
-    \end{itemize}
-}
-
-\todo{
-Change title.
-}
-
-\think{Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
-\think{Should I focus more on the usage of mass spring models, and discuss what they can be used for, i.e. not just going for mesh manipulation, but also other types of physical simulations?}
-
-\todo{Add link to repo! Invite Simon to the Repo}
-
-\todo{
-    Mass spring competes with physics approaches
-}
-
-Structure:
-Introduction
-Problem Description
-Simple Mesh Manipulation like Rounding a cube (Done both on CPU and GPU) % Don't do this?
-Spring Mass Systems
-What can Spring Mass Be Used For?
-Sources
-* Include not just sources and good tutorials, but perhaps also that it can be wise to read up on mesh generation.
-Reflection
 
 \include{report/inc/introduction} % includes latex files from the same directory
 \include{report/inc/problem_description} % could be called Methodology or methods or any filename
