@@ -38,8 +38,8 @@ public class MeshDeformer: MonoBehaviour, IDeformer
     {
         point = transform.InverseTransformPoint(point);
         var pointToVertex = mDisplacedVertices[i] - point;
-        if (pointToVertex.magnitude >= 0.5f)
-            return;
+        //if (pointToVertex.magnitude >= 0.5f)
+        //    return;
 
         pointToVertex *= UniformScale;
         var attenuatedForce = force / (1f + pointToVertex.sqrMagnitude);

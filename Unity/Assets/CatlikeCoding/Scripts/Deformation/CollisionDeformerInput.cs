@@ -9,6 +9,8 @@ public class CollisionDeformerInput : MonoBehaviour
 
     IDeformer mDeformer;
 
+    public float mCollisionDeformerForce = 10;
+
     private void Start()
     {
          mDeformer = GetComponent<IDeformer>();
@@ -56,7 +58,7 @@ public class CollisionDeformerInput : MonoBehaviour
             {
                 var point = contact.point;
                 point -= contact.normal * 0.1f;
-                mDeformer.AddDeformingForce(point, 10.0f);
+                mDeformer.AddDeformingForce(point, mCollisionDeformerForce);
                 DebugLines.DrawLine(transform.position, point, Color.red);
             }
         }

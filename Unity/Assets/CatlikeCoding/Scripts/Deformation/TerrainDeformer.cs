@@ -91,7 +91,7 @@ public class TerrainDeformer : MonoBehaviour, IDeformer
         var velocity = mVertexVelocities[i];
         var displacement = mDisplacedVertices[i] - mOriginalVertices[i];
         displacement *= UniformScale;
-        ///velocity -= displacement * SpringForce * Time.deltaTime;
+        velocity -= displacement * SpringForce * Time.deltaTime;
         velocity *= 1f - Damping * Time.deltaTime;
         mVertexVelocities[i] = velocity;
         mDisplacedVertices[i] += velocity * (Time.deltaTime / UniformScale);

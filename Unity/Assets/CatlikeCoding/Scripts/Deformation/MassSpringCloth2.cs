@@ -16,6 +16,8 @@ public class MassSpringCloth2
     public int ConstraintIterations = 2;
     private Mesh mMesh;
 
+    public bool mWindEnabled = false;
+
     [Header("Collisions - The colider of the sphere to collide with")]
     public SphereCollider mSphereCollider;
 
@@ -24,9 +26,11 @@ public class MassSpringCloth2
         public int V1Idx;
         public int V2Idx;
         public float RestDistance; // The Original Distance
+        public Color Color;
 
-        public Spring(int v1Idx, int v2Idx, Vector3[] vertices)
+        public Spring(int v1Idx, int v2Idx, Vector3[] vertices, Color color)
         {
+            Color = color;
             V1Idx = v1Idx;
             V2Idx = v2Idx;
             RestDistance = (vertices[v2Idx] - vertices[v1Idx]).magnitude;
@@ -77,28 +81,28 @@ public class MassSpringCloth2
                 // Strutcural Springs
                 // Top
                 if (row > 0)
-                    mSprings.Add(new Spring(RCToIdx(row - 1, col), RCToIdx(row, col), mPositions));
+                    mSprings.Add(new Spring(RCToIdx(row - 1, col), RCToIdx(row, col), mPositions, Color.green));
 
                 // Left
                 if (col > 0)
-                    mSprings.Add(new Spring(RCToIdx(row, col - 1), RCToIdx(row, col), mPositions));
+                    mSprings.Add(new Spring(RCToIdx(row, col - 1), RCToIdx(row, col), mPositions, Color.green));
 
                 // Shear Springs
                 // Top Left
                 if (row > 0 && col > 0)
-                    mSprings.Add(new Spring(RCToIdx(row - 1, col - 1), RCToIdx(row, col), mPositions));
+                    mSprings.Add(new Spring(RCToIdx(row - 1, col - 1), RCToIdx(row, col), mPositions, Color.yellow));
 
                 // Top Right
                 if (row > 0 && col < Columns - 1)
-                    mSprings.Add(new Spring(RCToIdx(row - 1, col + 1), RCToIdx(row, col), mPositions));
+                    mSprings.Add(new Spring(RCToIdx(row - 1, col + 1), RCToIdx(row, col), mPositions, Color.yellow));
 
-                //// Bending Springs
+                // Bending Springs
                 // Top skip 1
                 if (row > 1)
-                    mSprings.Add(new Spring(RCToIdx(row - 2, col), RCToIdx(row, col), mPositions));
+                    mSprings.Add(new Spring(RCToIdx(row - 2, col), RCToIdx(row, col), mPositions, Color.blue));
 
                 if (col > 1)
-                    mSprings.Add(new Spring(RCToIdx(row, col - 2), RCToIdx(row, col), mPositions));
+                    mSprings.Add(new Spring(RCToIdx(row, col - 2), RCToIdx(row, col), mPositions, Color.blue));
             }
         }
     }
@@ -108,15 +112,24 @@ public class MassSpringCloth2
         // Add Force
         for (int i = 0; i < mAccelerations.Length; i++)
         {
-            mAccelerations[i] += (Gravity / VertexMass);
-            var pos = mPositions[i];
+            
 
-           // Wind
-           //mAccelerations[i] += new Vector3(
-           //                                    Mathf.Sin(Mathf.Cos(5 * pos.x * pos.y * pos.z)),
-           //                                    -Mathf.Cos(pos.z * Time.fixedDeltaTime),
-           //                                    Mathf.Sin(pos.x * pos.y * Time.fixedDeltaTime)
-           //                                );
+            // Wind
+            if (mWindEnabled)
+            {
+                var pos = mPositions[i];
+                mAccelerations[i] += new Vector3(
+                                                    Mathf.Sin(Mathf.Cos(5 * pos.x * pos.y * pos.z)),
+                                                    -Mathf.Cos(pos.z * Time.fixedDeltaTime),
+                                                    Mathf.Sin(pos.x * pos.y * Time.fixedDeltaTime)
+                                                );
+            }
+            else
+            {
+                // Currently the wind is not strong enough to go against the gravity,
+                // so for demo purposes this hack is on.
+                mAccelerations[i] += (Gravity / VertexMass);
+            }
         }
 
         // Move particles
@@ -132,6 +145,7 @@ public class MassSpringCloth2
 
             mAccelerations[i] = Vector3.zero;
         }
+
 
         // Fix Constraints
         for (int step = 0; step < ConstraintIterations; step++)
@@ -218,54 +232,58 @@ public class MassSpringCloth2
         if (mPositions == null)
             return;
 
-        // Draw Vertices
-        Gizmos.color = Color.black;
-        for (int i = 0; i < mPositions.Length; i++)
-        {
-            var vertexWorld = transform.TransformPoint(mPositions[i]);
-            Gizmos.color = Color.black;
-            Gizmos.DrawSphere(vertexWorld, 0.01f);
-            //Gizmos.color = Color.yellow;
-            //Handles.Label(vertexWorld, $"{i}");
-        }
+        //// Draw Vertices
+        //Gizmos.color = Color.black;
+        //for (int i = 0; i < mPositions.Length; i++)
+        //{
+        //    var vertexWorld = transform.TransformPoint(mPositions[i]);
+        //    Gizmos.color = Color.black;
+        //    Gizmos.DrawSphere(vertexWorld, 0.01f);
+        //    //Gizmos.color = Color.yellow;
+        //    //Handles.Label(vertexWorld, $"{i}");
+        //}
 
-        // Draw all the springs
-        Gizmos.color = Color.white;
+        //// Draw all the springs
+        //Gizmos.color = Color.white;
 
-        for (int i = 0; i < mSprings.Count; i++)
-        {
-            var spring = mSprings[i];
-            var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
-            var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
-            Gizmos.DrawLine(v1World, v2World);
-        }
+        //for (int i = 0; i < mSprings.Count; i++)
+        //{
+        //    var spring = mSprings[i];
+        //    Gizmos.color = spring.Color;
+        //    var v1World = transform.TransformPoint(mPositions[spring.V1Idx]);
+        //    var v2World = transform.TransformPoint(mPositions[spring.V2Idx]);
+        //    //if (spring.Color == Color.blue)
+        //    //{
+        //        Gizmos.DrawLine(v1World, v2World);
+        //    //}
+        //}
 
         // Essentially just drawing the mesh here with gizmos, just so I don't have to deal with the mesh itself.
-        for (int row = 0; row < Rows; row++)
-        {
-            for (int col = 0; col < Columns; col++)
-            {
-                var v = transform.TransformPoint(mPositions[row * Columns + col]);
-                // Structural Bindings
-                // Top
-                //if (row > 0)
-                //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col]));
-                //// Left
-                //if (col > 0)
-                //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[row * Columns + col - 1]));
+        //for (int row = 0; row < Rows; row++)
+        //{
+        //    for (int col = 0; col < Columns; col++)
+        //    {
+        //        var v = transform.TransformPoint(mPositions[row * Columns + col]);
+        //        // Structural Bindings
+        //        // Top
+        //        //if (row > 0)
+        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col]));
+        //        //// Left
+        //        //if (col > 0)
+        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[row * Columns + col - 1]));
 
 
-                // Top Left
-                //if (row > 0 && col > 0)
-                //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col - 1]));
+        //        // Top Left
+        //        //if (row > 0 && col > 0)
+        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col - 1]));
 
 
-                // Top Right
-                //if (row > 0 && col < Columns - 1)
-                //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col + 1]));
+        //        // Top Right
+        //        //if (row > 0 && col < Columns - 1)
+        //        //    Gizmos.DrawLine(v, transform.TransformPoint(mVertices[(row - 1) * Columns + col + 1]));
 
-            }
-        }
+        //    }
+        //}
 
 
     }
