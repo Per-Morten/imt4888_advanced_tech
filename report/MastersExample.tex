@@ -65,12 +65,12 @@
   \makebox[\dimexpr\maxbarlen-2\tabcolsep+\arrayrulewidth][r]{#3}}
 
 \newcommand{\todo}[1]{{\color{blue}TODO: #1\\}}
-\renewcommand{\todo}[1]{}
+%\renewcommand{\todo}[1]{}
 
 \newcommand{\rephrase}[1]{{\color{Aquamarine} #1}}
 %\renewcommand{\rephrase}[1]{#1}
 \newcommand{\think}[1]{{\color{Orchid} #1 }}
-\renewcommand{\think}[1]{}
+%\renewcommand{\think}[1]{}
 
 
 \newcommand{\com}[1]{{\color{red}#1}} % supervisor comment
@@ -85,7 +85,6 @@
 %\renewcommand{\n}[1]{} %remove starting % to remove notes
 
 \newcommand{\dn}[1]{} % add the d to a note to say that you have finished with it.
-
 
 
 
@@ -120,11 +119,6 @@
 %\listoftables
 %\lstlistoflistings
 
-\section{Color legend}
-\todo{TODO Comments}
-\rephrase{Should be rephrased}
-\think{General thoughts}
-
 \think{
     Possible topics to cover:
     \begin{itemize}
@@ -139,19 +133,16 @@
     \end{itemize}
 }
 
-\todo{
-Change title.
-}
+
+\todo{Ensure that I always say: mass spring systems}
 
 \think{Add in that shape generation can be a smart thing to do to get a better overview of how everything fits together.}
 \think{Should I focus more on the usage of mass spring models, and discuss what they can be used for, i.e. not just going for mesh manipulation, but also other types of physical simulations?}
 
 \todo{Add link to repo! Invite Simon to the Repo}
 
-\todo{
-    Mass spring competes with physics approaches
-}
 
+\think{
 Structure:
 Introduction
 Problem Description
@@ -161,6 +152,7 @@ What can Spring Mass Be Used For?
 Sources
 * Include not just sources and good tutorials, but perhaps also that it can be wise to read up on mesh generation.
 Reflection
+}
 
 \include{report/inc/introduction} % includes latex files from the same directory
 \include{report/inc/problem_description} % could be called Methodology or methods or any filename
