@@ -1,15 +1,16 @@
-\chapter{Users}
-\rephrase{While cloth simulation and simple deformation effects are obvious applications of the spring mass system, 
-it has many more interesting applications.}
-One example is to model rope using a spring mass system. The rope can be modelled as a collection of particles
+\chapter{Uses}
+While cloth simulation and simple deformation effects are obvious applications of the mass spring system, 
+it has a variety of interesting applications.
+
+One example is to model rope using a mass spring system. The rope can be modelled as a collection of particles
 connected together through springs which can stretch and bend to a specified degree.
 The same line of thinking could then be extended to hair simulation.
 
-Spring mass systems are also used outside of the video game world.
-For example, Moosegaard~\cite{mosegaards_clothing_simulation} shows how a GPU accelerated spring mass system is suitable 
+Mass spring systems are also used outside of the video game world.
+For example, Moosegaard~\cite{mosegaards_clothing_simulation} shows how a GPU accelerated mass spring system is suitable 
 for surgical simulations. Moving the simulation over to the GPU allowed them to reach much faster convergence rates for
 larger and more detailed organ models, leading to more realistic simulations of organs being cut and morphed.
-Similarly, Nedel~\cite{nedel_muscle_spring_mass} shows simulations of muscle deformations using a spring mass system,
+Similarly, Nedel~\cite{nedel_muscle_spring_mass} shows simulations of muscle deformations using a mass spring system,
 introducing angular constraints to avoid situations where a model can completely change shape.
 
 Müller\cite{muller_fem} also brings up how simulators like these could be valuable for animators on projects where
@@ -20,8 +21,7 @@ for modelling "skeletons" of in-game characters.
 He describes how the corpses within the game Hitman: Codename 47 consists of just particles and springs, as seen in figure~\ref{fig:spring_mass_skeleton}.
 These springs have varying degrees of stiffness to ensure that the body does not bend or rotate in unnatural ways.
 For example, a very stiff spring between the legs can ensure that legs never cross over.
-Additionally, Jakobsen uses angular springs to ensure that the body does not move in ways that the human body does not allow.
-
+Additionally, Jakobsen uses angular springs to ensure that the body does not move in ways that the human body would not allow.
 This approach allows for intuitive physical responses as well, an example given by Jakobsen is that if a character is hit in the shoulder
 reacting to that hit can be done simply by moving the shoulder particle based on the force from the hit.
 Moving the particle will impact the other springs attached to it, which will drag the shoulder and its connected particles closer to each other,
