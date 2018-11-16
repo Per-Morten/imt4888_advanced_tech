@@ -8,6 +8,7 @@ As previously indicated we are working with a mass-spring system for this implem
 Following the decision of models we need to decide on an integration scheme, how should we model the changes in acceleration, position, and velocity of our vertices?
 Many different integration schemes exits, such as explicit Euler integration, Runge Kutta, or Verlet integration, all with different properties and difficulty of implementation.
 The two used in the following implementations will be semi-implicit Euler integration and Verlet integration.
+
 Lastly, we need to decide if we go for a kinematic system where we model springs as constraints, 
 or a dynamic system where we model the springs as proper springs working with Hooke's law\cite{math_for_games}, both of which are presented within this chapter.
 
@@ -19,7 +20,7 @@ In Semi-Implicit Euler integration we keep the total accumulated force, velocity
 Upon each time-stepped update of the system we divide all the force that has been applied to an object by the mass of the object to get the acceleration of the object.
 Multiplying this acceleration with the timestep yields the change in velocity of the object, which added on the previous velocity becomes the new velocity.
 This new velocity is then multiplied with the timestep and added to the position, reflecting the change in position over time.
-The code for this can be seen in listing~\ref{code:semi-implicit_euler_integration}.
+The code for this can be seen in Listing~\ref{code:semi-implicit_euler_integration}.
 
 \begin{figure}
 \begin{lstlisting}[label={code:semi-implicit_euler_integration},language=csharp,caption={Semi-Implicit Euler Integration}]
@@ -40,8 +41,9 @@ However, it is not entirely stable, meaning that you can get into situations whe
 Rather than storing velocities and positions of each game object like the Euler integration, Verlet integration stores the current and previous positions of each game object.
 Per timestep, the current velocity is calculated implicitly by subtracting the current position from the previous one.
 Changes to the current velocity are also modeled via positional data by integrating the game object's acceleration twice over the timestep.
+
 The new position of a game object following a Verlet integration is then: The current position added with the calculated velocity and the positional change due to acceleration.
-Code for this can be seen in listing~\ref{code:verlet_integration}.
+Code for this can be seen in Listing~\ref{code:verlet_integration}.
 
 \begin{figure}
 \begin{lstlisting}[label={code:verlet_integration},language=csharp,caption={Verlet Integration}]
@@ -83,8 +85,10 @@ Once all the decisions of the deformation model, integration scheme and kinemati
 \subsection{Dynamic Approach - Ball Deformation}
 Jasper Flick\cite{catlike_mesh_deformation} shows an implementation\footnote{Video of this implementation in action: \url{https://www.youtube.com/watch?v=f-5RzfN8kjw}} where the springs are implied based on the original position of each vertex and their new position.
 The implementation takes a dynamic approach to deformation and follows a semi-implicit Euler integration scheme.
+
 In this implementation, we keep a copy of the initial vertex positions, as well as a collection of the modified vertices.
 Additionally, we keep a collection of the velocity of each vertex, which we update each time force is added to a vertex.
+
 The springs come into play when updating the positions of all the vertices based on their velocities.
 Each spring within this system is the vector between the initial positions of the vertices in the mesh and their current positions, as seen in Figure~\ref{fig:catlike_mesh_deformation_springs}.
 Upon update of the vertices, the force of a spring is applied to the velocity of a vertex in the direction of the spring, moving the vertex back towards its initial position.
@@ -122,8 +126,9 @@ Applying outward force from the inside of the model can create a relatively conv
 Giving the sphere a high SpringForce will lead to it being harder to deform, and more bouncy when trying to return to its original shape.
 
 \subsubsection{Limitations}
-As mentioned by Flick\cite{catlike_mesh_deformation} this implementation is not a physics simulation, while the mesh is deformed,
+As mentioned by Jasper Flick~\cite{catlike_mesh_deformation} this implementation is not a physics simulation, while the mesh is deformed,
 the colliders and physical representation of the object stay the same.
+
 Additionally, none of the vertices are connected to each other through springs, and therefore move completely independent from each other.
 This means that if we were to for instance pin two of the vertices to their initial position, and then apply force to the mesh
 none of the other vertices would respect that two of them were locked in place, leading to less than satisfying results.
@@ -136,7 +141,7 @@ This gives greater control in that it allows you to apply force to a specific ve
 
 \subsubsection{Spring Types}
 There are three types of springs within this implementation, all serving the same purpose of holding the model together,
-but in different ways. The different types can be seen in figure~\ref{fig:spring_types}.
+but in different ways. The different types can be seen in Figure~\ref{fig:spring_types}.
 \begin{figure}
     \centering
     \caption{The different spring types (here labeled constraints). Image taken from Jesper Mosegaard\cite{mosegaards_clothing_simulation}}
@@ -148,9 +153,9 @@ but in different ways. The different types can be seen in figure~\ref{fig:spring
 
 \paragraph{Structural Springs}
 The structural springs are the vertical and horizontal connections between the vertices, which ensures that the model stays in one piece.
-However, they alone are not enough, as the model can collapse into itself in a two dimensional space\cite{jeff_lander_real_time_cloth} this can be seen in figure~\ref{fig:structural_springs_collapsing}.
+However, they alone are not enough, as the model can collapse into itself in a two dimensional space\cite{jeff_lander_real_time_cloth} this can be seen in Figure~\ref{fig:structural_springs_collapsing}.
 
-\begin{figure}[H]
+\begin{figure}
     \centering
     \caption{Cloth of only structural springs in the process of collapsing into itself}
     \scalebox{0.5}{
@@ -162,8 +167,8 @@ However, they alone are not enough, as the model can collapse into itself in a t
 \paragraph{Shear Springs}
 Shear springs fix the issue mentioned above by connecting each vertex to their diagonal neighbors.
 When the vertices are about to start collapsing in on themselves the shear springs will push them apart again\cite{jeff_lander_real_time_cloth}.
-With this, the model also acts in a more three-dimensional space, as the vertices need to make use of the third dimension to satisfy the shear springs, as seen in figure~\ref{fig:shear_springs_collapsing}.
-\begin{figure}[H]
+With this, the model also acts in a more three-dimensional space, as the vertices need to make use of the third dimension to satisfy the shear springs, as seen in Figure~\ref{fig:shear_springs_collapsing}.
+\begin{figure}
     \centering
     \caption{Cloth of structural and shear springs, preventing it from collapsing into 2D space}
     \scalebox{0.5}{
@@ -174,12 +179,12 @@ With this, the model also acts in a more three-dimensional space, as the vertice
 
 \paragraph{Bending Springs}
 Technically you only need these structural and shear springs to create an ok looking cloth simulation,
-however, a third type of spring called bending springs can be added.
+however, a third type of spring called a bending spring can be added.
 These are connected between each vertex and their second neighbor,
 which can help fix cases where the second neighbor of a vertex is unrealistically placed in the system.
 This, in general, leads to the cloth becoming more flat, as extreme differences between the vertices are corrected for
 through the second neighbouring vertices\cite{jeff_lander_real_time_cloth}.
-While not as obvious, this can be seen in figure~\ref{fig:bending_springs_collapsing}.
+While not as obvious, this can be seen in Figure~\ref{fig:bending_springs_collapsing}.
 \begin{figure}[H]
     \centering
     \caption{Cloth of structural, shear, and bending strings, preventing it from bending unrealistically into itself.}
@@ -204,9 +209,10 @@ While not as obvious, this can be seen in figure~\ref{fig:bending_springs_collap
 \subsubsection{Implementation}
 In this implementation we keep all the springs within a collection, each spring knowing which two vertices they are connected to and the desired rest length of the spring.
 Upon update, we iterate through all the vertices and calculate their new positions based on the Verlet integration scheme.
+
 Following the update is fixing the constraints. This is done by iterating through all the springs and correcting the distance between the vertices it is connected to.
 This needs to be done several times as to avoid the model seeming to elastic.
-The code for this can be seen in listing~\ref{code:satisfy_constraints}.
+The code for this can be seen in Listing~\ref{code:satisfy_constraints}.
 
 \begin{figure}
 \begin{lstlisting}[label={code:satisfy_constraints},language=csharp,caption={Semi-Implicit Euler Integration}]
@@ -262,7 +268,10 @@ such as quilting. Currently, the cloth looks like infinitely thin silk, which is
 quilting would add thickness to the model, allowing it to look and act more like wool or cotton. 
 Fisher suggests doing this with a marching cubes algorithm.
 However, that would potentially be more costly to simulate and to draw.
+
 Another extension could be self-collision or collision with other soft bodies, however, this is very challenging to implement
 and quickly ends up being really expensive in terms of performance as well.
+
 Moving these calculations to the GPU is also a possibility, as a lot of the calculations are data parallel and would probably benefit quite a lot for being executed in a parallel environment.
-This implementation does not make any distinction between the different types of springs, extending the implementation to react differently based on the different spring types could lead to more realistic behavior.
+
+This also implementation does not make any distinction between the different types of springs, extending the implementation to react differently based on the different spring types could lead to more realistic behavior.
